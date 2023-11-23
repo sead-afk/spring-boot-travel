@@ -1,27 +1,27 @@
-package user;
-import javax.persistence.*;
+package com.travelapp.core.model;
 
-@Entity
-@Table
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
     private String username;
     private String email;
 
-    public User(Long id, String username, String email) {
+    public User(String id, String username, String email) {
         this.id = id;
         this.username = username;
         this.email = email;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
