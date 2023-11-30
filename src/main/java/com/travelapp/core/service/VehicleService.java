@@ -8,6 +8,7 @@ import com.travelapp.core.repository.VehicleRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class VehicleService {
@@ -25,6 +26,19 @@ public class VehicleService {
         return vehicleRepository.findAll();
     }
 
+    public Vehicle updateVehicle(String vehicleId, Vehicle payload) throws Exception {
+        Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
+        if(vehicle.isEmpty())
+            throw new Exception("Cannot find vehicle with provided payload");
+
+        vehicle.get().setName(payload.getName());
+        vehicle.get().setVehicleType(payload.getVehicleType());
+        vehicle.get().setMileage(payload.getMileage());
+        vehicle.get().setManufactorDate(payload.getManufactorDate());
+
+        vehicleRepository.save(vehicle.get());
+        return vehicle.get();
+    }
     public List<Vehicle> filter(VehicleType vehicleType, String name) {
         return vehicleRepository.findAllByVehicleTypeOrNameLike(vehicleType, name);
     }

@@ -1,6 +1,7 @@
 package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.Destination;
+import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.service.DestinationService;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,10 @@ public class DestinationController {
         return destinationService.getAll();
     }
 
+    @PutMapping(path = "/{destinationId}")
+    public Destination updateDestination(@PathVariable("destinationId") String destinationId, @RequestBody Destination destinationPayload) throws Exception {
+        return destinationService.updateDestination(destinationId, destinationPayload);
+    }
     @GetMapping(path = "/filter")
     public List<Destination> filterDestinations(
             @RequestParam("type") DestinationType destinationType,

@@ -28,6 +28,10 @@ public class VehicleController {
         return vehicleService.getAll();
     }
 
+    @PutMapping(path = "/{vehicleId}")
+    public Vehicle updateVehicle(@PathVariable("vehicleId") String vehicleId, @RequestBody Vehicle vehiclepayload) throws Exception {
+        return vehicleService.updateVehicle(vehicleId, vehiclepayload);
+    }
     @GetMapping(path = "/filter")
     public List<Vehicle> filterVehicle(
             @RequestParam("type") VehicleType vehicleType,

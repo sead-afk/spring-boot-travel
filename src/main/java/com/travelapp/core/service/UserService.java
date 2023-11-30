@@ -29,6 +29,8 @@ public class UserService {
     }
 
     public void deleteUser(String userId) {
+        boolean exists = userRepository.existsById(userId);
+        if
 
     }
 

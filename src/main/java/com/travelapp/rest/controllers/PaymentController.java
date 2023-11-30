@@ -28,6 +28,11 @@ public class PaymentController {
         return paymentService.getAll();
     }
 
+    @PutMapping(path = "/{paymentId}")
+    public Payment updatePayment(@PathVariable("paymentId") String paymentId, @RequestBody Payment paymentPayload) throws Exception {
+        return paymentService.updatePayment(paymentId, paymentPayload);
+    }
+
     @GetMapping(path = "/filter")
     public List<Payment> filterPayments(
             @RequestParam("type") PaymentType paymentType
