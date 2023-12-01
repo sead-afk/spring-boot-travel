@@ -28,10 +28,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(String userId) {
-        boolean exists = userRepository.existsById(userId);
-        if
-
+    public void deleteUser(User payload) {
+        Optional<User> userOptional = userRepository.findUserByEmail(payload.getEmail());
+        if (!userOptional.isPresent()) {
+            throw new IllegalStateException("User does not exist");
+        }
+        userRepository.deleteById(payload.getId());
     }
 
     public User updateUser(String userId, User payload) throws Exception {

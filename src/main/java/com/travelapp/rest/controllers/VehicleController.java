@@ -1,6 +1,7 @@
 package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.Destination;
+import com.travelapp.core.model.User;
 import com.travelapp.core.model.Vehicle;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.VehicleType;
@@ -31,6 +32,11 @@ public class VehicleController {
     @PutMapping(path = "/{vehicleId}")
     public Vehicle updateVehicle(@PathVariable("vehicleId") String vehicleId, @RequestBody Vehicle vehiclepayload) throws Exception {
         return vehicleService.updateVehicle(vehicleId, vehiclepayload);
+    }
+
+    @DeleteMapping(path = "/{vehicle}")
+    public void deleteVehicle(@RequestBody Vehicle vehicle) {
+        vehicleService.deleteVehicle(vehicle);
     }
     @GetMapping(path = "/filter")
     public List<Vehicle> filterVehicle(

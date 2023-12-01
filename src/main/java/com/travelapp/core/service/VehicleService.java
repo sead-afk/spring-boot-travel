@@ -1,6 +1,7 @@
 package com.travelapp.core.service;
 
 import com.travelapp.core.model.Destination;
+import com.travelapp.core.model.User;
 import com.travelapp.core.model.Vehicle;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.VehicleType;
@@ -38,6 +39,14 @@ public class VehicleService {
 
         vehicleRepository.save(vehicle.get());
         return vehicle.get();
+    }
+
+    public void deleteVehicle(Vehicle payload) {
+        Optional<Vehicle> vehicleOptional = vehicleRepository.findById(payload.getId());
+        if (!vehicleOptional.isPresent()) {
+            throw new IllegalStateException("Vehicle does not exist");
+        }
+        vehicleRepository.deleteById(payload.getId());
     }
     public List<Vehicle> filter(VehicleType vehicleType, String name) {
         return vehicleRepository.findAllByVehicleTypeOrNameLike(vehicleType, name);

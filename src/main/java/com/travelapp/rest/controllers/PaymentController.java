@@ -2,6 +2,7 @@ package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.Payment;
+import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.PaymentType;
 import com.travelapp.core.service.PaymentService;
@@ -33,6 +34,10 @@ public class PaymentController {
         return paymentService.updatePayment(paymentId, paymentPayload);
     }
 
+    @DeleteMapping(path = "/{payment}")
+    public void deletePayment(@RequestBody Payment payment) {
+        paymentService.deletePayment(payment);
+    }
     @GetMapping(path = "/filter")
     public List<Payment> filterPayments(
             @RequestParam("type") PaymentType paymentType

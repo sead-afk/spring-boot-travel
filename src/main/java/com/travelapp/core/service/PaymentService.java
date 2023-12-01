@@ -2,6 +2,7 @@ package com.travelapp.core.service;
 
 import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.Payment;
+import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.PaymentType;
 import com.travelapp.core.repository.PaymentRepository;
@@ -43,5 +44,13 @@ public class PaymentService {
     }
     public List<Payment> filter(PaymentType paymentType) {
         return paymentRepository.findAllByPaymentType(paymentType);
+    }
+
+    public void deletePayment(Payment payload) {
+        Optional<Payment> paymentOptional = paymentRepository.findById(payload.getId());
+        if (!paymentOptional.isPresent()) {
+            throw new IllegalStateException("Payment does not exist");
+        }
+        paymentRepository.deleteById(payload.getId());
     }
 }

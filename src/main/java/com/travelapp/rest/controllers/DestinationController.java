@@ -27,6 +27,10 @@ public class DestinationController {
         return destinationService.getAll();
     }
 
+    @DeleteMapping(path = "/{destination}")
+    public void deleteDestination(@RequestBody Destination destination) {
+        destinationService.deleteDestination(destination);
+    }
     @PutMapping(path = "/{destinationId}")
     public Destination updateDestination(@PathVariable("destinationId") String destinationId, @RequestBody Destination destinationPayload) throws Exception {
         return destinationService.updateDestination(destinationId, destinationPayload);

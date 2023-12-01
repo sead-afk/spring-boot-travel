@@ -31,9 +31,9 @@ public class UserController {
         userService.addNewUser(user);
     }
 
-    @DeleteMapping(path = "/{userId}")
-    public void deleteUser(@PathVariable("userId") String userId) {
-        userService.deleteUser(userId);
+    @DeleteMapping(path = "/{user}")
+    public void deleteUser(@RequestBody User user) {
+        userService.deleteUser(user);
     }
 
     @PutMapping(path = "/{userId}")

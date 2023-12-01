@@ -40,4 +40,12 @@ public class DestinationService {
     public List<Destination> filter(DestinationType destinationType, String name) {
         return destinationRepository.findAllByDestinationTypeOrNameLike(destinationType, name);
     }
+
+    public void deleteDestination(Destination payload) {
+        Optional<Destination> destinationOptional = destinationRepository.findById(payload.getId());
+        if (!destinationOptional.isPresent()) {
+            throw new IllegalStateException("Destination does not exist");
+        }
+        destinationRepository.deleteById(payload.getId());
+    }
 }
