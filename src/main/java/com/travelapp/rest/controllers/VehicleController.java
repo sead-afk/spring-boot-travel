@@ -45,4 +45,9 @@ public class VehicleController {
     ){
         return vehicleService.filter(vehicleType, name);
     }
+
+    @GetMapping(path = "/{vehicleId}")
+    public Vehicle getVehicleById(@PathVariable String vehicleId) throws Exception {
+        return vehicleService.getVehicleById(vehicleId);
+    }
 }

@@ -51,4 +51,12 @@ public class VehicleService {
     public List<Vehicle> filter(VehicleType vehicleType, String name) {
         return vehicleRepository.findAllByVehicleTypeOrNameLike(vehicleType, name);
     }
+
+    public Vehicle getVehicleById(String vehicleId) throws Exception {
+        Optional<Vehicle> vehicle = vehicleRepository.findById(vehicleId);
+        if(vehicle.isEmpty())
+            throw new Exception("Cannot find vehicle with provided payload");
+
+        return vehicle.get();
+    }
 }

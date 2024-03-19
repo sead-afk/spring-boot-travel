@@ -48,4 +48,12 @@ public class DestinationService {
         }
         destinationRepository.deleteById(payload.getId());
     }
+
+    public Destination getDestinationById(String destinationId) throws Exception {
+        Optional<Destination> destination = destinationRepository.findById(destinationId);
+        if(destination.isEmpty())
+            throw new Exception("Cannot find destination with provided payload");
+
+        return destination.get();
+    }
 }

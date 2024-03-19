@@ -42,4 +42,8 @@ public class DestinationController {
     ){
         return destinationService.filter(destinationType, name);
     }
+    @GetMapping(path = "/{destinationId}")
+    public Destination getDestinationById(@PathVariable String destinationId) throws Exception {
+        return destinationService.getDestinationById(destinationId);
+    }
 }

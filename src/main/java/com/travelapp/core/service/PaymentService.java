@@ -19,6 +19,14 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
+    public Payment getPaymentById(String paymentId) throws Exception {
+        Optional<Payment> payment = paymentRepository.findById(paymentId);
+        if(payment.isEmpty())
+            throw new Exception("Cannot find payment with provided payload");
+
+        return payment.get();
+    }
+
     public Payment addPayment(Payment payment) {
         return paymentRepository.save(payment);
     }

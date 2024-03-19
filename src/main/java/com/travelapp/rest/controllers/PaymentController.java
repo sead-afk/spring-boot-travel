@@ -44,4 +44,9 @@ public class PaymentController {
     ){
         return paymentService.filter(paymentType);
     }
+
+    @GetMapping(path = "/{paymentId}")
+    public Payment getPaymentById(@PathVariable String paymentId) throws Exception {
+        return paymentService.getPaymentById(paymentId);
+    }
 }
