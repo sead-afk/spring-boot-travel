@@ -2,6 +2,9 @@ package com.travelapp.core.service;
 
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,4 +58,15 @@ public class UserService {
 
         return user.get();
     }
+
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) {
+                return userRepository.findByUsernameOrEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+            }
+        };
+    }
+
 }

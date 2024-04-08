@@ -12,4 +12,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     @Query("SELECT u FROM User u WHERE u.email = ?1")
     Optional<User> findUserByEmail(String email);
+    @Query(value="{$or:[{email:'?0'}, {username:'?0'}]}")
+    Optional<User> findByUsernameOrEmail(String email);
 }

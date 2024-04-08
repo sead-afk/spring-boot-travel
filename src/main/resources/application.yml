@@ -13,3 +13,7 @@ logging:
           mongodb:
             core:
               org.springframework.data.mongodb.core.MongoTemplate: INFO
+
+security:
+  jwt:
+    secret: 'someSecretKey'
