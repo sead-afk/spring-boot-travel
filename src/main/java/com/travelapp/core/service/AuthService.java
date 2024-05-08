@@ -49,7 +49,6 @@ public class AuthService {
                 orElseThrow(() -> new IllegalArgumentException("This user does not exist"));
         String jwt = jwtService.generateToken(user);
         return new LoginDTO(jwt);
-
     }
 
 }
