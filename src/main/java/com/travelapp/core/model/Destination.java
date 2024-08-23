@@ -4,17 +4,45 @@ import com.travelapp.core.model.enums.DestinationType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document
 public class Destination {
     @Id
     private String id;
     private String name;
+    private String country;
+    private List<String> images;
     private DestinationType destinationType;
 
-    public Destination(String id, String name, DestinationType destinationType) {
+    /*public Destination(String id, String name, DestinationType destinationType) {
         this.id = id;
         this.name = name;
         this.destinationType = destinationType;
+    }*/
+
+    public Destination(String id, DestinationType destinationType, List<String> images, String name, String country) {
+        this.id = id;
+        this.destinationType = destinationType;
+        this.images = images;
+        this.name = name;
+        this.country = country;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getId() {

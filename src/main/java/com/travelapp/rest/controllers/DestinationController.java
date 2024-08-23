@@ -4,12 +4,14 @@ import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.service.DestinationService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/destination")
+@RequestMapping(path = "api/destinations")
+@SecurityRequirement(name = "JWT Security")
 public class DestinationController {
     private final DestinationService destinationService;
 

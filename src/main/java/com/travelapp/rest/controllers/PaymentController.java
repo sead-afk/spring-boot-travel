@@ -6,12 +6,14 @@ import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.PaymentType;
 import com.travelapp.core.service.PaymentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/payment")
+@RequestMapping(path = "api/payments")
+@SecurityRequirement(name = "JWT Security")
 public class PaymentController {
     private final PaymentService paymentService;
 

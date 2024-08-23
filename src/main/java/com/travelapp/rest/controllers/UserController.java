@@ -2,12 +2,14 @@ package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.User;
 import com.travelapp.core.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/user")
+@RequestMapping(path = "api/users")
+@SecurityRequirement(name = "JWT Security")
 public class UserController {
 
     private final UserService userService;

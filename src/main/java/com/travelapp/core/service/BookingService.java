@@ -1,0 +1,73 @@
+package com.travelapp.core.service;
+
+import com.travelapp.core.model.Booking;
+import com.travelapp.core.model.User;
+import com.travelapp.core.repository.BookingRepository;
+import com.travelapp.core.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class BookingService {
+
+    private final BookingRepository bookingRepository;
+
+    public BookingService(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
+    }
+
+    public List<Booking> getBookings() {
+        return bookingRepository.findAll();
+    }
+
+    public void addBooking(Booking booking) {
+        Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());
+        if (userOptional.isPresent()) {
+            throw new IllegalStateException("email taken");
+        }
+        userRepository.save(user);
+    }
+
+    public void deleteUser(User payload) {
+        Optional<User> userOptional = userRepository.findUserByEmail(payload.getEmail());
+        if (!userOptional.isPresent()) {
+            throw new IllegalStateException("User does not exist");
+        }
+        userRepository.deleteById(payload.getId());
+    }
+
+    public User updateUser(String userId, User payload) throws Exception {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty())
+            throw new Exception("Cannot find user with provided payload");
+
+        user.get().setUsername(payload.getUsername());
+        user.get().setEmail(payload.getEmail());
+
+        userRepository.save(user.get());
+        return user.get();
+    }
+
+    public User getUserById(String userId) throws Exception {
+        Optional<User> user = userRepository.findById(userId);
+        if(user.isEmpty())
+            throw new Exception("Cannot find user with provided payload");
+
+        return user.get();
+    }
+
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) {
+                return userRepository.findByUsernameOrEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+            }
+        };
+    }
+}

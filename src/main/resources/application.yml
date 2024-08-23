@@ -1,9 +1,10 @@
 spring:
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: traveldb
+      uri: mongodb://localhost:27017/traveldb
+      #host: localhost
+      #port: 27017
+      #database: traveldb
 
 logging:
   level:
