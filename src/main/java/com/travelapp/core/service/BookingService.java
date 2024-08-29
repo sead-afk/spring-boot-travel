@@ -1,12 +1,7 @@
 package com.travelapp.core.service;
 
 import com.travelapp.core.model.Booking;
-import com.travelapp.core.model.User;
 import com.travelapp.core.repository.BookingRepository;
-import com.travelapp.core.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,49 +20,44 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public void addBooking(Booking booking) {
-        Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());
-        if (userOptional.isPresent()) {
-            throw new IllegalStateException("email taken");
+    public Booking addBooking(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
+    public void deleteBooking(Booking payload) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(payload.getId());
+        if (!bookingOptional.isPresent()) {
+            throw new IllegalStateException("Booking does not exist");
         }
-        userRepository.save(user);
+        bookingRepository.deleteById(payload.getId());
     }
 
-    public void deleteUser(User payload) {
-        Optional<User> userOptional = userRepository.findUserByEmail(payload.getEmail());
-        if (!userOptional.isPresent()) {
-            throw new IllegalStateException("User does not exist");
-        }
-        userRepository.deleteById(payload.getId());
+    public Booking updateBooking(String bookingId, Booking payload) throws Exception {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        if(booking.isEmpty())
+            throw new Exception("Cannot find booking with provided payload");
+
+        booking.get().setUser(payload.getUser());
+        booking.get().setType(payload.getType());
+        booking.get().setReferenceNumber(payload.getReferenceNumber());
+        booking.get().setBookingDate(payload.getBookingDate());
+        booking.get().setStartDate(payload.getStartDate());
+        booking.get().setEndDate(payload.getEndDate());
+
+        bookingRepository.save(booking.get());
+        return booking.get();
     }
 
-    public User updateUser(String userId, User payload) throws Exception {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty())
-            throw new Exception("Cannot find user with provided payload");
+    public Booking getBookingById(String bookingId) throws Exception {
+        Optional<Booking> booking = bookingRepository.findById(bookingId);
+        if(booking.isEmpty())
+            throw new Exception("Cannot find booking with provided payload");
 
-        user.get().setUsername(payload.getUsername());
-        user.get().setEmail(payload.getEmail());
-
-        userRepository.save(user.get());
-        return user.get();
+        return booking.get();
     }
 
-    public User getUserById(String userId) throws Exception {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty())
-            throw new Exception("Cannot find user with provided payload");
-
-        return user.get();
+    public List<Booking> filter(String Type, String referenceNumber) {
+        return bookingRepository.findAllByTypeOrReferenceNumberLike(Type, referenceNumber);
     }
 
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsService() {
-            @Override
-            public UserDetails loadUserByUsername(String username) {
-                return userRepository.findByUsernameOrEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found."));
-            }
-        };
-    }
 }

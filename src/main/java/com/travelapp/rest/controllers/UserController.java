@@ -2,6 +2,8 @@ package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.User;
 import com.travelapp.core.service.UserService;
+import com.travelapp.rest.dto.UserDTO;
+import com.travelapp.rest.dto.UserRequestDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,18 +21,18 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public List<UserDTO> getUsers() {
         return userService.getUsers();
     }
 
     @GetMapping(path = "/{userId}")
-    public User getUserById(@PathVariable String userId) throws Exception {
+    public UserDTO getUserById(@PathVariable String userId) throws Exception {
         return userService.getUserById(userId);
     }
 
     @PostMapping
-    public void registerNewUser(@RequestBody User user) {
-        userService.addNewUser(user);
+    public UserDTO registerNewUser(@RequestBody UserRequestDTO user) {
+        return userService.addNewUser(user);
     }
 
     @DeleteMapping(path = "/{user}")
@@ -39,7 +41,7 @@ public class UserController {
     }
 
     @PutMapping(path = "/{userId}")
-    public User updateUser(@PathVariable("userId") String userId, @RequestBody User userPayload) throws Exception {
+    public UserDTO updateUser(@PathVariable("userId") String userId, @RequestBody UserRequestDTO userPayload) throws Exception {
         return userService.updateUser(userId, userPayload);
     }
 }

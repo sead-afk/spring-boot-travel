@@ -1,5 +1,7 @@
 package com.travelapp.core.model;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.travelapp.core.model.enums.UserType;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,16 +25,27 @@ public class User implements UserDetails{
     private String username;
     private String password;
     private Date creationDate;
+    @JsonSerialize(contentUsing = GrantedAuthoritySerializer.class)
+    @JsonDeserialize(contentUsing = GrantedAuthorityDeserializer.class)
+    private Collection<? extends GrantedAuthority> authorities;
 
-    public User(String id, String username, String email, String password, UserType userType) {
-        this.id = id;
+    public User(Date creationDate, String password, String username, String email, String lastName, String firstName, UserType userType, String id, Collection<? extends GrantedAuthority> authorities) {
+        this.creationDate = creationDate;
+        this.password = password;
         this.username = username;
         this.email = email;
-        this.password = password;
+        this.lastName = lastName;
+        this.firstName = firstName;
         this.userType = userType;
+        this.id = id;
+        this.authorities = authorities;
     }
 
     public User() {
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 
     public String getId() {

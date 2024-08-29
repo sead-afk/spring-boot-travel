@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Document
 public class Booking {
     @Id
-    private Long id;
+    private String id;
     private User user;
     private String type; // e.g., FLIGHT, HOTEL, CAR_RENTAL
     private String referenceNumber;
@@ -17,7 +17,7 @@ public class Booking {
     private LocalDate endDate;
     private double amount;
 
-    public Booking(Long id, User user, String type, String referenceNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, double amount) {
+    public Booking(String id, User user, String type, String referenceNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, double amount) {
         this.id = id;
         this.user = user;
         this.type = type;
@@ -28,11 +28,15 @@ public class Booking {
         this.amount = amount;
     }
 
-    public Long getId() {
+    public Booking() {
+
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

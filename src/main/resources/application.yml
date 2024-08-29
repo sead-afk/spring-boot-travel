@@ -17,4 +17,4 @@ logging:
 
 security:
   jwt:
-    secret: 'someSecretKey'
+    secret: 'YF5WkJBdXRw9DBz1gqVEtIdag0x5RNxH7wHf0cH15hnobA4lC5'

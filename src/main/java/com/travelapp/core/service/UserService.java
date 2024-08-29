@@ -2,6 +2,8 @@ package com.travelapp.core.service;
 
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.UserRepository;
+import com.travelapp.rest.dto.UserDTO;
+import com.travelapp.rest.dto.UserRequestDTO;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserService {
@@ -19,16 +23,23 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getUsers() {
+        List<User> users = userRepository.findAll();
+        // List<User> users = userRepository.findAllCustom();
+
+        return users
+                .stream()
+                .map(UserDTO::new)
+                .collect(toList());
     }
 
-    public void addNewUser(User user) {
-        Optional<User> userOptional = userRepository.findUserByEmail(user.getEmail());
+    public UserDTO addNewUser(UserRequestDTO payload) {
+        Optional<User> userOptional = userRepository.findUserByEmail(payload.getEmail());
         if (userOptional.isPresent()) {
             throw new IllegalStateException("email taken");
         }
-        userRepository.save(user);
+        User user = userRepository.save(payload.toEntity());
+        return new UserDTO(user);
     }
 
     public void deleteUser(User payload) {
@@ -39,24 +50,23 @@ public class UserService {
         userRepository.deleteById(payload.getId());
     }
 
-    public User updateUser(String userId, User payload) throws Exception {
+    public UserDTO updateUser(String userId, UserRequestDTO  payload) throws Exception {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty())
             throw new Exception("Cannot find user with provided payload");
 
-        user.get().setUsername(payload.getUsername());
-        user.get().setEmail(payload.getEmail());
-
-        userRepository.save(user.get());
-        return user.get();
+        User updatedUser = payload.toEntity();
+        updatedUser.setId(user.get().getId());
+        updatedUser = userRepository.save(updatedUser);
+        return new UserDTO(updatedUser);
     }
 
-    public User getUserById(String userId) throws Exception {
+    public UserDTO getUserById(String userId) throws Exception {
         Optional<User> user = userRepository.findById(userId);
         if(user.isEmpty())
             throw new Exception("Cannot find user with provided payload");
 
-        return user.get();
+        return new UserDTO(user.get());
     }
 
     public UserDetailsService userDetailsService() {

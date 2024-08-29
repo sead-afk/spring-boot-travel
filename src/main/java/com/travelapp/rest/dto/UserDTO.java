@@ -4,6 +4,7 @@ import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.UserType;
 
 import java.util.Date;
+import java.util.List;
 
 public class UserDTO {
 
@@ -13,6 +14,7 @@ public class UserDTO {
     private UserType userType;
     private String email;
     private Date creationDate;
+    //private List<String> authorities;
 
     public UserDTO(User user) {
         this.id = user.getId();
