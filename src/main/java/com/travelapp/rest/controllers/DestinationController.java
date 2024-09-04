@@ -25,6 +25,7 @@ public class DestinationController {
     public List<Destination> getCurrentUserDestinations() {
         return destinationService.getCurrentUserDestinations();
     }
+
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Destination addDestination(@RequestBody Destination destination){

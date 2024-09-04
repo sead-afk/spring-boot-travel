@@ -9,6 +9,7 @@ import java.util.List;
 public class Hotel {
     @Id
     private String id;
+    private String userId;
     private String name;
     private String location;
     private String description;
@@ -22,6 +23,14 @@ public class Hotel {
         this.description = description;
         this.pricePerNight = pricePerNight;
         this.amenities = amenities;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getId() {

@@ -12,5 +12,6 @@ public interface FlightRepository extends MongoRepository<Flight, String> {
 
     public List<Flight> findAllByairline(String airline);
     public List<Flight> findAllBydepartureAirport(String Type, String referenceNumber);
+    List<Flight> findByUserId(String userId);
     public List<Flight> findFlightByDepartureAirportAndArrivalAirport(String departureAirport, String arrivalAirport);
 }

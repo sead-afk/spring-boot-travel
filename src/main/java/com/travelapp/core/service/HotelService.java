@@ -1,7 +1,12 @@
 package com.travelapp.core.service;
 
+import com.travelapp.core.model.Flight;
 import com.travelapp.core.model.Hotel;
+import com.travelapp.core.model.User;
 import com.travelapp.core.repository.HotelRepository;
+import com.travelapp.core.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +15,16 @@ import java.util.Optional;
 @Service
 public class HotelService {
     private final HotelRepository hotelRepository;
+    private UserRepository userRepository;
 
     public HotelService(HotelRepository hotelRepository) {
         this.hotelRepository = hotelRepository;
+    }
+
+    public List<Hotel> getCurrentUserHotels() {  //my booked Hotels
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        return hotelRepository.findByUserId(user.getId());
     }
 
     public List<Hotel> getHotels() {

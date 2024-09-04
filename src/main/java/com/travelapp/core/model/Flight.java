@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class Flight {
     @Id
     private String id;
+    private String userId;
     private String airline;
     private String flightNumber;
     private String departureAirport;
@@ -26,6 +27,14 @@ public class Flight {
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
         this.price = price;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getId() {

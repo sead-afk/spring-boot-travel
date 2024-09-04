@@ -1,5 +1,6 @@
 package com.travelapp.rest.controllers;
 
+import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.Flight;
 import com.travelapp.core.service.FlightService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,6 +18,12 @@ public class FlightController {
 
     public FlightController(FlightService flightService) {
         this.flightService = flightService;
+    }
+
+    @GetMapping("/my-flights")
+    @PreAuthorize("hasRole('MEMBER')")
+    public List<Flight> getCurrentUserFlights() {    //Booked flights
+        return flightService.getCurrentUserFlights();
     }
 
     @PostMapping(path = "/add")

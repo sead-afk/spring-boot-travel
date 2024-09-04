@@ -1,5 +1,6 @@
 package com.travelapp.rest.controllers;
 
+import com.travelapp.core.model.Flight;
 import com.travelapp.core.model.Hotel;
 import com.travelapp.core.service.HotelService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,6 +18,12 @@ public class HotelController {
 
     public HotelController(HotelService hotelService) {
         this.hotelService = hotelService;
+    }
+
+    @GetMapping("/my-hotels")
+    @PreAuthorize("hasRole('MEMBER')")
+    public List<Hotel> getCurrentUserHotels() {    //my Booked hotels
+        return hotelService.getCurrentUserHotels();
     }
 
     @PostMapping(path = "/add")
