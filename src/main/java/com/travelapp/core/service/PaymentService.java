@@ -6,6 +6,10 @@ import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.PaymentType;
 import com.travelapp.core.repository.PaymentRepository;
+import com.travelapp.core.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,8 +19,17 @@ import java.util.Optional;
 public class PaymentService {
     private final PaymentRepository paymentRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public PaymentService(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
+    }
+
+    public List<Payment> getCurrentUserPayments() {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        return paymentRepository.findByUserId(user.getId());
     }
 
     public Payment getPaymentById(String paymentId) throws Exception {

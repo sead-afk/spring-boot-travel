@@ -1,7 +1,12 @@
 package com.travelapp.core.service;
 
 import com.travelapp.core.model.Booking;
+import com.travelapp.core.model.User;
 import com.travelapp.core.repository.BookingRepository;
+import com.travelapp.core.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +15,20 @@ import java.util.Optional;
 @Service
 public class BookingService {
 
+    @Autowired
     private final BookingRepository bookingRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public BookingService(BookingRepository bookingRepository) {
         this.bookingRepository = bookingRepository;
+    }
+
+    public List<Booking> getCurrentUserBookings() {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        return bookingRepository.findByUserId(user.getId());
     }
 
     public List<Booking> getBookings() {

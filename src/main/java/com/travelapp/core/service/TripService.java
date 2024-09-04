@@ -3,8 +3,13 @@ package com.travelapp.core.service;
 import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.Trip;
 import com.travelapp.core.model.Trip;
+import com.travelapp.core.model.User;
 import com.travelapp.core.repository.TripRepository;
 import com.travelapp.core.repository.TripRepository;
+import com.travelapp.core.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,9 +18,17 @@ import java.util.Optional;
 public class TripService {
 
     private final TripRepository tripRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public TripService(TripRepository tripRepository) {
         this.tripRepository = tripRepository;
+    }
+
+    public List<Trip> getCurrentUserTrips() {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        return tripRepository.findByUserId(user.getId());
     }
 
     public Trip addTrip(Trip trip) {

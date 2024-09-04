@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface DestinationRepository extends MongoRepository<Destination, String> {
     public List<Destination> findAllByDestinationTypeOrNameLike(DestinationType destinationType, String name);
-
+    List<Destination> findByUserId(String userId);
     public List<Destination> findAllByDestinationTypeAndNameEquals(DestinationType destinationType, String name);
 
     public Destination findFirstByNameEquals(String name);

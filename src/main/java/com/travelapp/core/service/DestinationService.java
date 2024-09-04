@@ -4,6 +4,9 @@ import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.repository.DestinationRepository;
+import com.travelapp.core.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +15,16 @@ import java.util.Optional;
 @Service
 public class DestinationService {
     private final DestinationRepository destinationRepository;
+    private UserRepository userRepository;
 
     public DestinationService(DestinationRepository destinationRepository) {
         this.destinationRepository = destinationRepository;
+    }
+
+    public List<Destination> getCurrentUserDestinations() {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        return destinationRepository.findByUserId(user.getId());
     }
 
     public Destination addDestination(Destination destination) {

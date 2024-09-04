@@ -10,6 +10,7 @@ import java.util.List;
 public class Destination {
     @Id
     private String id;
+    private String userId;
     private String name;
     private String country;
     private List<String> images;

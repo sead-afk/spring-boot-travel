@@ -16,6 +16,7 @@ public class Booking {
     private LocalDate startDate;
     private LocalDate endDate;
     private double amount;
+    private String userId;
 
     public Booking(String id, User user, String type, String referenceNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, double amount) {
         this.id = id;
@@ -30,6 +31,14 @@ public class Booking {
 
     public Booking() {
 
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getId() {
