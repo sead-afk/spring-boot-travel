@@ -25,13 +25,11 @@ public class AuthController {
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/register")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<UserDTO> register(@RequestBody UserRequestDTO user){
         return ResponseEntity.ok(authService.signUp(user));
     }
 
     @RequestMapping(method = RequestMethod.POST, path = "/login")
-    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<LoginDTO> login(@RequestBody LoginRequestDTO loginRequestDTO){
         return ResponseEntity.ok(authService.signIn(loginRequestDTO));
     }

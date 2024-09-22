@@ -17,14 +17,15 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private UserRepository userRepository;
 
-    public HotelService(HotelRepository hotelRepository) {
+    public HotelService(HotelRepository hotelRepository, UserRepository userRepository) {
         this.hotelRepository = hotelRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Hotel> getCurrentUserHotels() {  //my booked Hotels
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
-        return hotelRepository.findByUserId(user.getId());
+        return hotelRepository.findByUserid(user);
     }
 
     public List<Hotel> getHotels() {
@@ -32,15 +33,19 @@ public class HotelService {
     }
 
     public Hotel addHotel(Hotel hotel) {
+        var username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        //hotel.setUserId(user.getId());
+        hotel.setUserid(user.getId());
         return hotelRepository.save(hotel);
     }
 
-    public void deleteHotel(Hotel payload) {
-        Optional<Hotel> hotelOptional = hotelRepository.findById(payload.getId());
+    public void deleteHotel(String hotelId) {
+        Optional<Hotel> hotelOptional = hotelRepository.findById(hotelId);
         if (!hotelOptional.isPresent()) {
             throw new IllegalStateException("Hotel does not exist");
         }
-        hotelRepository.deleteById(payload.getId());
+        hotelRepository.deleteById(hotelId);
     }
 
     public Hotel updateHotel(String hotelId, Hotel payload) throws Exception {

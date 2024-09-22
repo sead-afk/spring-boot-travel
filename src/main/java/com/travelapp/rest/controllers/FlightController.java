@@ -20,11 +20,11 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-    @GetMapping("/my-flights")
+    /*@GetMapping("/my-flights")
     @PreAuthorize("hasRole('MEMBER')")
     public List<Flight> getCurrentUserFlights() {    //Booked flights
         return flightService.getCurrentUserFlights();
-    }
+    }*/
 
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")
@@ -38,16 +38,16 @@ public class FlightController {
         return flightService.getFlights();
     }
 
-    @PutMapping(path = "/{flightId}")
+    @PutMapping(path = "/update/{flightId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Flight updateFlight(@PathVariable("flightId") String flightId, @RequestBody Flight flightpayload) throws Exception {
         return flightService.updateFlight(flightId, flightpayload);
     }
 
-    @DeleteMapping(path = "/{flight}")
+    @DeleteMapping(path = "/delete/{flightId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteFlight(@RequestBody Flight flight) {
-        flightService.deleteFlight(flight);
+    public void deleteFlight(@PathVariable("flightId")  String flightId) {
+        flightService.deleteFlight(flightId);
     }
     @GetMapping(path = "/filter")
     @PreAuthorize("hasAuthority('ADMIN')")

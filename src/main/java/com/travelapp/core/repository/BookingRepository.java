@@ -10,6 +10,6 @@ import java.util.List;
 public interface BookingRepository extends MongoRepository<Booking, String> {
     public List<Booking> findAllByReferenceNumber(String referenceNumber);
     public List<Booking> findAllByTypeOrReferenceNumberLike(String Type, String referenceNumber);
-    List<Booking> findByUserId(String userId);
+    //List<Booking> findByUserId(String userId);
     public List<Booking> findBookingBy(String Type, String name);
 }

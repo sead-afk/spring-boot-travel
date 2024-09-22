@@ -1,5 +1,6 @@
 package com.travelapp.rest.controllers;
 
+import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.User;
 import com.travelapp.core.service.UserService;
 import com.travelapp.rest.dto.UserDTO;
@@ -27,6 +28,12 @@ public class UserController {
         return userService.getUsers();
     }
 
+    @GetMapping("/my-account")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public User getCurrentUserAccountDetails() {
+        return userService.getCurrentUserAccountDetails();
+    }
+
     @GetMapping(path = "/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public UserDTO getUserById(@PathVariable String userId) throws Exception {
@@ -34,19 +41,19 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'GUEST')")
+    @PreAuthorize("hasAnyAuthority('GUEST','ADMIN')")
     public UserDTO registerNewUser(@RequestBody UserRequestDTO user) {
         return userService.addNewUser(user);
     }
 
-    @DeleteMapping(path = "/{user}")
+    @DeleteMapping(path = "/delete/{userId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteUser(@RequestBody User user) {
-        userService.deleteUser(user);
+    public void deleteUser(@PathVariable("userId") String userId) {
+        userService.deleteUser(userId);
     }
 
     @PutMapping(path = "/{userId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','MEMBER')")
     public UserDTO updateUser(@PathVariable("userId") String userId, @RequestBody UserRequestDTO userPayload) throws Exception {
         return userService.updateUser(userId, userPayload);
     }

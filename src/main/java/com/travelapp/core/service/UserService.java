@@ -1,9 +1,11 @@
 package com.travelapp.core.service;
 
+import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.UserRepository;
 import com.travelapp.rest.dto.UserDTO;
 import com.travelapp.rest.dto.UserRequestDTO;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,12 +44,12 @@ public class UserService {
         return new UserDTO(user);
     }
 
-    public void deleteUser(User payload) {
-        Optional<User> userOptional = userRepository.findUserByEmail(payload.getEmail());
+    public void deleteUser(String userId) {
+        Optional<User> userOptional = userRepository.findUserById(userId);
         if (!userOptional.isPresent()) {
             throw new IllegalStateException("User does not exist");
         }
-        userRepository.deleteById(payload.getId());
+        userRepository.deleteById(userId);
     }
 
     public UserDTO updateUser(String userId, UserRequestDTO  payload) throws Exception {
@@ -73,10 +75,18 @@ public class UserService {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) {
-                return userRepository.findByUsernameOrEmail(username)
-                        .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+
+                User user = userRepository.findByUsernameOrEmail(username).orElse(null);
+                //return userRepository.findByUsernameOrEmail(username)
+                        //.orElseThrow(() -> new UsernameNotFoundException("User not found."));
+                return user;
             }
         };
     }
 
+    public User getCurrentUserAccountDetails() {
+        String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        return user;
+    }
 }

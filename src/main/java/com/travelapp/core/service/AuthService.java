@@ -13,6 +13,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Service
 public class AuthService {
     private final UserRepository userRepository;
@@ -47,7 +50,8 @@ public class AuthService {
         );
         User user = userRepository.findUserByEmail(loginRequestDTO.getEmail()).
                 orElseThrow(() -> new IllegalArgumentException("This user does not exist"));
-        String jwt = jwtService.generateToken(user);
+        Map<String,String> claims = Map.of("email",user.getEmail());
+        String jwt = jwtService.generateToken(claims,user);
         return new LoginDTO(jwt);
     }
 

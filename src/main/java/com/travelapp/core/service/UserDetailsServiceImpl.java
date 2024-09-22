@@ -26,10 +26,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         User user = userOptional
                 .orElseThrow(() -> new UsernameNotFoundException("No user " +
                         "Found with username : " + username));
+        String role = user.getUserType().toString();
         return new org.springframework.security
                 .core.userdetails.User(user.getUsername(), user.getPassword(),
                 user.isEnabled(), true, true,
-                true, getAuthorities("USER"));
+                true, getAuthorities(role));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String role) {

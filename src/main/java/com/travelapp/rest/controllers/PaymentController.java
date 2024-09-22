@@ -22,11 +22,11 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/my-payments")
+    /*@GetMapping("/my-payments")
     @PreAuthorize("hasRole('MEMBER')")
     public List<Payment> getCurrentUserPayments() {
         return paymentService.getCurrentUserPayments();
-    }
+    }*/
 
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")

@@ -21,11 +21,11 @@ public class FlightService {
         this.flightRepository = flightRepository;
     }
 
-    public List<Flight> getCurrentUserFlights() {  //my booked flights
+    /*public List<Flight> getCurrentUserFlights() {  //my booked flights
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return flightRepository.findByUserId(user.getId());
-    }
+    }*/
 
     public List<Flight> getFlights() {
         return flightRepository.findAll();
@@ -35,12 +35,12 @@ public class FlightService {
         return flightRepository.save(flight);
     }
 
-    public void deleteFlight(Flight payload) {
-        Optional<Flight> flightOptional = flightRepository.findById(payload.getId());
+    public void deleteFlight(String flightId) {
+        Optional<Flight> flightOptional = flightRepository.findById(flightId);
         if (!flightOptional.isPresent()) {
             throw new IllegalStateException("Flight does not exist");
         }
-        flightRepository.deleteById(payload.getId());
+        flightRepository.deleteById(flightId);
     }
 
     public Flight updateFlight(String flightId, Flight payload) throws Exception {

@@ -9,37 +9,79 @@ import java.time.LocalDate;
 public class Booking {
     @Id
     private String id;
-    private User user;
-    private String type; // e.g., FLIGHT, HOTEL, CAR_RENTAL
+    //private User user;
+    private Destination destination;
+    private Hotel hotel;
+    private Flight flight;
+    //private Payment payment;
+    //private Trip trip;
+    private String type; // e.g., FLIGHT, HOTEL
     private String referenceNumber;
     private LocalDate bookingDate;
     private LocalDate startDate;
     private LocalDate endDate;
     private double amount;
-    private String userId;
 
-    public Booking(String id, User user, String type, String referenceNumber, LocalDate bookingDate, LocalDate startDate, LocalDate endDate, double amount) {
-        this.id = id;
-        this.user = user;
-        this.type = type;
-        this.referenceNumber = referenceNumber;
-        this.bookingDate = bookingDate;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.amount = amount;
-    }
+
 
     public Booking() {
 
     }
 
-    public String getUserId() {
-        return userId;
+    public Booking(LocalDate startDate, /*User user,*/ Destination destination, Hotel hotel, Flight flight, /*Payment payment, Trip trip,*/ String type, String referenceNumber, LocalDate bookingDate, LocalDate endDate, double amount) {
+        this.startDate = startDate;
+        //this.user = user;
+        this.destination = destination;
+        this.hotel = hotel;
+        this.flight = flight;
+        //this.payment = payment;
+        //this.trip = trip;
+        this.type = type;
+        this.referenceNumber = referenceNumber;
+        this.bookingDate = bookingDate;
+        this.endDate = endDate;
+        this.amount = amount;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public Destination getDestination() {
+        return destination;
     }
+
+    public void setDestination(Destination destination) {
+        this.destination = destination;
+    }
+
+    public Hotel getHotel() {
+        return hotel;
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public Flight getFlight() {
+        return flight;
+    }
+
+    public void setFlight(Flight flight) {
+        this.flight = flight;
+    }
+
+    /*public Payment getPayment() {
+        return payment;
+    }
+
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+    }*/
+
+    /*public Trip getTrip() {
+        return trip;
+    }
+
+    public void setTrip(Trip trip) {
+        this.trip = trip;
+    }*/
 
     public String getId() {
         return id;
@@ -81,13 +123,13 @@ public class Booking {
         this.bookingDate = bookingDate;
     }
 
-    public User getUser() {
+    /*public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }
+    }*/
 
     public String getType() {
         return type;

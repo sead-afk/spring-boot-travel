@@ -5,12 +5,13 @@ import com.travelapp.core.model.Hotel;
 import com.travelapp.core.service.HotelService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/hotel")
+@RequestMapping(path = "api/hotels")
 @SecurityRequirement(name = "JWT Security")
 public class HotelController {
 
@@ -29,6 +30,7 @@ public class HotelController {
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Hotel addHotel(@RequestBody Hotel hotel){
+        var username = SecurityContextHolder.getContext().getAuthentication();
         return hotelService.addHotel(hotel);
     }
 
@@ -44,10 +46,10 @@ public class HotelController {
         return hotelService.updateHotel(hotelId, hotelpayload);
     }
 
-    @DeleteMapping(path = "/{hotel}")
+    @DeleteMapping(path = "/delete/{hotelId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteHotel(@RequestBody Hotel hotel) {
-        hotelService.deleteHotel(hotel);
+    public void deleteHotel(@PathVariable("hotelId") String hotelId) {
+        hotelService.deleteHotel(hotelId);
     }
     @GetMapping(path = "/filter")
     @PreAuthorize("hasAnyAuthority('MEMBER', 'ADMIN')")

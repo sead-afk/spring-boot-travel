@@ -2,6 +2,7 @@ package com.travelapp.core.repository;
 
 import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.Payment;
+import com.travelapp.core.model.User;
 import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.model.enums.PaymentType;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,5 +12,5 @@ import java.util.List;
 @Repository
 public interface PaymentRepository extends MongoRepository<Payment, String> {
     public List<Payment> findAllByPaymentType(PaymentType paymentType);
-    List<Payment> findByUserId(String userId);
+    List<Payment> findByUser(User user);
 }

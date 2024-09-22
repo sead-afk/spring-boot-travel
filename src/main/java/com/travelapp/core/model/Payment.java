@@ -12,7 +12,7 @@ import java.util.Currency;
 public class Payment {
     @Id
     private String id;
-    private String userId; //should be foreign key
+    private User user;
     private float amount;
     private PaymentType paymentType;
     private Timestamp dateAndTime;
@@ -27,13 +27,6 @@ public class Payment {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
 
     public float getAmount() {
         return amount;

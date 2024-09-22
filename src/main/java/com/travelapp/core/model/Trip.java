@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class Trip {
     private String id;
     private User user;
-    private String userId;
     private Destination destination;
     private LocalDate startDate;
     private LocalDate endDate;
@@ -18,14 +17,6 @@ public class Trip {
         this.startDate = startDate;
         this.endDate = endDate;
         this.status = status;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getId() {

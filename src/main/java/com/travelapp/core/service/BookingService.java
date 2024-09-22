@@ -15,21 +15,20 @@ import java.util.Optional;
 @Service
 public class BookingService {
 
-    @Autowired
     private final BookingRepository bookingRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    public BookingService(BookingRepository bookingRepository) {
+    public BookingService(BookingRepository bookingRepository, UserRepository userRepository) {
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<Booking> getCurrentUserBookings() {
+    /*public List<Booking> getCurrentUserBookings() {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return bookingRepository.findByUserId(user.getId());
-    }
+    }*/
 
     public List<Booking> getBookings() {
         return bookingRepository.findAll();
@@ -52,7 +51,7 @@ public class BookingService {
         if(booking.isEmpty())
             throw new Exception("Cannot find booking with provided payload");
 
-        booking.get().setUser(payload.getUser());
+        //booking.get().setUser(payload.getUser());
         booking.get().setType(payload.getType());
         booking.get().setReferenceNumber(payload.getReferenceNumber());
         booking.get().setBookingDate(payload.getBookingDate());

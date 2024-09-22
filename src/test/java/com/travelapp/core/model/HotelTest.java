@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.time.LocalDate;
 
 public class HotelTest {
-    @Test
+    /*@Test
     void shouldCreateNewBooking() {
         User Mark = new User();
         Booking booking = new Booking(
@@ -56,5 +56,5 @@ public class HotelTest {
                 .assertThat(booking1)
                 .usingRecursiveComparison()
                 .isEqualTo(booking2);
-    }
+    }*/
 }

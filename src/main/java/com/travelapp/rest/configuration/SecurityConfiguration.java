@@ -35,16 +35,35 @@ public class SecurityConfiguration {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Bean
+    /*@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/destinations/**").hasRole("USER")
+                        .requestMatchers("/api/users/**").authenticated()
+                        .requestMatchers("/api/destinations/**").hasRole("ADMIN")
+                        .requestMatchers("/api/payments/**").authenticated()
+                        .anyRequest().authenticated())
+                .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }*/
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(request -> request
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register", "/api/auth/login").permitAll() // Allow access to auth endpoints
                         .requestMatchers("/api/users/**").authenticated()
                         .requestMatchers("/api/destinations/**").authenticated()
+                        .requestMatchers("/api/flights/**").authenticated()
+                        .requestMatchers("/api/hotels/**").authenticated()
                         .requestMatchers("/api/payments/**").authenticated()
-                        .anyRequest().permitAll())
+                        .requestMatchers("/api/bookings/**").authenticated()
+                        .requestMatchers("/api/trips/**").authenticated()
+                        .anyRequest().permitAll()) // Allow other requests
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

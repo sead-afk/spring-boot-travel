@@ -17,17 +17,21 @@ public class DestinationService {
     private final DestinationRepository destinationRepository;
     private UserRepository userRepository;
 
-    public DestinationService(DestinationRepository destinationRepository) {
+    public DestinationService(DestinationRepository destinationRepository, UserRepository userRepository) {
         this.destinationRepository = destinationRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Destination> getCurrentUserDestinations() {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
-        return destinationRepository.findByUserId(user.getId());
+        return destinationRepository.findByUserId(user);
     }
 
     public Destination addDestination(Destination destination) {
+        var username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        User user = userRepository.findByUsername(username);
+        destination.setUserId(user.getId());
         return destinationRepository.save(destination);
     }
 
@@ -51,12 +55,12 @@ public class DestinationService {
         return destinationRepository.findAllByDestinationTypeOrNameLike(destinationType, name);
     }
 
-    public void deleteDestination(Destination payload) {
-        Optional<Destination> destinationOptional = destinationRepository.findById(payload.getId());
+    public void deleteDestination(String destinationId) {
+        Optional<Destination> destinationOptional = destinationRepository.findById(destinationId);
         if (!destinationOptional.isPresent()) {
             throw new IllegalStateException("Destination does not exist");
         }
-        destinationRepository.deleteById(payload.getId());
+        destinationRepository.deleteById(destinationId);
     }
 
     public Destination getDestinationById(String destinationId) throws Exception {

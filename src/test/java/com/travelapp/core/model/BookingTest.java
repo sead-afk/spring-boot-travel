@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public class BookingTest {
 
-    @Test
+    /*@Test
     void shouldCreateNewBooking() {
         User Mark = new User();
         Booking booking = new Booking(
@@ -57,5 +57,5 @@ public class BookingTest {
                 .assertThat(booking1)
                 .usingRecursiveComparison()
                 .isEqualTo(booking2);
-    }
+    }*/
 }

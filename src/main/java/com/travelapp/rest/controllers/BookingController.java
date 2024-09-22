@@ -19,11 +19,11 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping("/my-bookings")
+    /*@GetMapping("/my-bookings")
     @PreAuthorize("hasRole('MEMBER')")
     public List<Booking> getCurrentUserBookings() {
         return bookingService.getCurrentUserBookings();
-    }
+    }*/
 
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")

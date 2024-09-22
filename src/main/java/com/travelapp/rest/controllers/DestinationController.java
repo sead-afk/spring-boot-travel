@@ -6,6 +6,7 @@ import com.travelapp.core.model.enums.DestinationType;
 import com.travelapp.core.service.DestinationService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class DestinationController {
     }
 
     @GetMapping("/my-destinations")
-    @PreAuthorize("hasRole('MEMBER')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public List<Destination> getCurrentUserDestinations() {
         return destinationService.getCurrentUserDestinations();
     }
@@ -29,21 +30,22 @@ public class DestinationController {
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Destination addDestination(@RequestBody Destination destination){
+        var username = SecurityContextHolder.getContext().getAuthentication();
         return destinationService.addDestination(destination);
     }
 
     @GetMapping(path = "/")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER','GUEST')")
     public List<Destination> getAll(){
         return destinationService.getAll();
     }
 
-    @DeleteMapping(path = "/{destination}")
+    @DeleteMapping(path = "/delete/{destinationId}")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteDestination(@RequestBody Destination destination) {
-        destinationService.deleteDestination(destination);
+    public void deleteDestination(@PathVariable("destinationId") String destinationId) {
+        destinationService.deleteDestination(destinationId);
     }
-    @PutMapping(path = "/{destinationId}")
+    @PutMapping(path = "/update/{destinationId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Destination updateDestination(@PathVariable("destinationId") String destinationId, @RequestBody Destination destinationPayload) throws Exception {
         return destinationService.updateDestination(destinationId, destinationPayload);

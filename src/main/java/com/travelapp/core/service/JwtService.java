@@ -23,16 +23,22 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
+
+    public String extractEmail(String token)
+    {
+        Claims claims = extractAllClaims(token);
+        return claims.get("email", String.class);
+    }
     private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails);
+    public String generateToken(Map<String,String> claims, UserDetails userDetails) {
+        return generateTokenWithClaims(claims, userDetails);
     }
 
-    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    private String generateTokenWithClaims(Map<String, String> extraClaims, UserDetails userDetails) {
         return Jwts.builder()
                 .claims(extraClaims)
                 .subject(userDetails.getUsername())

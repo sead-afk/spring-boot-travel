@@ -26,11 +26,11 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    public List<Payment> getCurrentUserPayments() {
+    /*public List<Payment> getCurrentUserPayments() {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return paymentRepository.findByUserId(user.getId());
-    }
+    }*/
 
     public Payment getPaymentById(String paymentId) throws Exception {
         Optional<Payment> payment = paymentRepository.findById(paymentId);
