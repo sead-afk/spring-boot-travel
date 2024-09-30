@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDate;
 
 @Document
-public class Booking {
+public class    Booking {
     @Id
     private String id;
     //private User user;
