@@ -35,8 +35,7 @@ public class HotelService {
     public Hotel addHotel(Hotel hotel) {
         var username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
-        //hotel.setUserId(user.getId());
-        hotel.setUserid(user.getId());
+        //hotel.setUserid(user.getId());
         return hotelRepository.save(hotel);
     }
 
@@ -56,7 +55,6 @@ public class HotelService {
         hotel.get().setName(payload.getName());
         hotel.get().setLocation(payload.getLocation());
         hotel.get().setDescription(payload.getDescription());
-        hotel.get().setPricePerNight(payload.getPricePerNight());
         hotel.get().setAmenities(payload.getAmenities());
 
         hotelRepository.save(hotel.get());

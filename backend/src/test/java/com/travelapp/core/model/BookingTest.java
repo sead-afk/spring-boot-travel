@@ -3,9 +3,11 @@ package com.travelapp.core.model;
 import org.assertj.core.api.AssertionsForInterfaceTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
 
+@SpringBootTest
 public class BookingTest {
 
     /*@Test

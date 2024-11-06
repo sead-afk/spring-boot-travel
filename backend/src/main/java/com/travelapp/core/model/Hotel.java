@@ -17,11 +17,10 @@ import java.util.List;
 public class Hotel {
     @Id
     private String id;
-    private String userid;
+    //private String userid;
     private String name;
     private String location;
     private String description;
-    private double pricePerNight;
     private List<String> amenities;
 
 }
