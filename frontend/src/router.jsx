@@ -1,10 +1,10 @@
 import React from "react";
 import { createBrowserRouter } from 'react-router-dom'
 
-import HomeContainer from "./containers/Home";
-import LoginContainer from "./containers/Login";
-import RegisterContainer from "./containers/Register";
-import HotelsContainer from "./containers/Hotels";
+import HomeContainer from "./pages/Home.tsx";
+import LoginContainer from "./pages/Login.tsx";
+import RegisterContainer from "./pages/Register.tsx";
+import HotelsContainer from "./pages/Hotels.tsx";
 
 const router = createBrowserRouter([
     {

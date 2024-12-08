@@ -5,11 +5,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 
-@Document
+@Document(collection = "flights")
 public class Flight {
     @Id
     private String id;
-    private String userId;
+    //private String userId;
     private String airline;
     private String flightNumber;
     private String departureAirport;

@@ -5,6 +5,7 @@ import com.travelapp.core.model.Hotel;
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.HotelRepository;
 import com.travelapp.core.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,11 @@ public class HotelService {
         this.userRepository = userRepository;
     }
 
-    public List<Hotel> getCurrentUserHotels() {  //my booked Hotels
+    /*public List<Hotel> getCurrentUserHotels() {  //my booked Hotels
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return hotelRepository.findByUserid(user);
-    }
+    }*/
 
     public List<Hotel> getHotels() {
         return hotelRepository.findAll();
@@ -69,7 +70,7 @@ public class HotelService {
         return hotel.get();
     }
 
-    public List<Hotel> filter(Double price, String location) {
+    /*public List<Hotel> filter(Double price, String location) {
         return hotelRepository.findHotelByPricePerNightGreaterThanAndLocation(price, location);
-    }
+    }*/
 }

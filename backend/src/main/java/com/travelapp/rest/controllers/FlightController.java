@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "api/v1/flight")
+@RequestMapping(path = "api/flights")
 @SecurityRequirement(name = "JWT Security")
+@CrossOrigin(origins = "http://localhost", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
 public class FlightController {
 
     private final FlightService flightService;
@@ -33,7 +34,7 @@ public class FlightController {
     }
 
     @GetMapping(path = "/")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public List<Flight> getAll(){
         return flightService.getFlights();
     }

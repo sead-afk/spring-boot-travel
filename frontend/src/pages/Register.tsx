@@ -1,6 +1,6 @@
 import { useState } from "react";
 import '../styles/form.css'
-import { URL } from "../config/api";
+import { URL } from "../config/api.js";
 
 const RegisterContainer = () => {
     const [registerData, setRegisterData] = useState({

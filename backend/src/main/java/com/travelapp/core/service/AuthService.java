@@ -10,6 +10,7 @@ import com.travelapp.rest.dto.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,15 +44,19 @@ public class AuthService {
        return new UserDTO(user);
     }
 
-    public LoginDTO signIn(LoginRequestDTO loginRequestDTO){
-        authenticationManager.authenticate(
+    public LoginDTO signIn(LoginRequestDTO loginRequestDTO) throws AuthenticationException
+    {
+
+        var authResult = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDTO.getEmail(),
                         loginRequestDTO.getPassword())
         );
+
+        System.out.println("sejo");
         User user = userRepository.findUserByEmail(loginRequestDTO.getEmail()).
                 orElseThrow(() -> new IllegalArgumentException("This user does not exist"));
-        Map<String,String> claims = Map.of("email",user.getEmail());
-        String jwt = jwtService.generateToken(claims,user);
+        Map<String, String> claims = Map.of("email", user.getEmail());
+        String jwt = jwtService.generateToken(claims, user);
         return new LoginDTO(jwt);
     }
 

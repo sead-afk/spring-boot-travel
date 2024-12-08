@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Document
+@Document(collection = "hotels")
 @AllArgsConstructor
 @NoArgsConstructor
 public class Hotel {
