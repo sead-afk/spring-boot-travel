@@ -2,11 +2,11 @@
 # Build the Node.js frontend (located in the TravelFrontend folder)
 
 # Build the Spring Boot backend (located in the backend folder)
-backend = "cd backend && mvn clean package"
+backend = "mvn clean package"
 
 [phases.start]
 # Start the Spring Boot backend
-backend = "cd backend && java -jar target/*.jar"
+backend = "java -jar target/*.jar"
 
 # Serve the Node.js frontend (if needed)
 
