@@ -1,16 +1,28 @@
-# Nixpacks.toml configuration for Railway deployment
+[phases.build]
+# Build the Node.js frontend (located in the TravelFrontend folder)
+frontend = "cd TravelFrontend && npm install && npm run build"
 
-[builds]
+# Build the Spring Boot backend (located in the backend folder)
+backend = "cd backend && mvn clean package"
 
-# Backend build configuration (Spring Boot)
-[[builds.backend]]
-path = "backend"  # Path to the backend folder
-build_command = "./mvnw clean install -DskipTests"  # Backend build command (Spring Boot)
-start_command = "java -jar target/*.jar"  # Command to start the Spring Boot application
+[phases.start]
+# Start the Spring Boot backend
+backend = "cd backend && java -jar target/*.jar"
 
-# Frontend build configuration (live-server for pure JS frontend)
-[[builds.frontend]]
-path = "TravelFrontend"  # Path to the frontend folder
-build_command = "npm install"  # Install frontend dependencies (like live-server)
-start_command = "npm start"  # Start live-server to serve static files
+# Serve the Node.js frontend (if needed)
+frontend = "cd TravelFrontend && npm start"
 
+[env]
+# Environment variables for both frontend and backend
+NODE_ENV = "production"
+SPRING_PROFILES_ACTIVE = "prod"
+
+[files]
+# Include necessary files for both frontend and backend
+"TravelFrontend/" = "/TravelFrontend"
+"backend/" = "/backend"
+
+[ports]
+# Expose the necessary ports
+backend = 8080  # Spring Boot backend port
+frontend = 3000 # Node.js frontend port (if applicable)
