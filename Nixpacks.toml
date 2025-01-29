@@ -1,10 +1,16 @@
-[builds]
-[[builds.frontend]]
-path = "TravelFrontend"
-build_command = "npm install"  # Install dependencies for the frontend
-start_command = "npm run start"  # Start the live-server to serve static files
+# Nixpacks.toml configuration for Railway deployment
 
+[builds]
+
+# Backend build configuration (Spring Boot)
 [[builds.backend]]
-path = "backend"
-build_command = "./mvnw package -DskipTests"  # Spring Boot build command
-start_command = "java -jar target/*.jar"  # Start Spring Boot backend
+path = "backend"  # Path to the backend folder
+build_command = "./mvnw clean install -DskipTests"  # Backend build command (Spring Boot)
+start_command = "java -jar target/*.jar"  # Command to start the Spring Boot application
+
+# Frontend build configuration (live-server for pure JS frontend)
+[[builds.frontend]]
+path = "TravelFrontend"  # Path to the frontend folder
+build_command = "npm install"  # Install frontend dependencies (like live-server)
+start_command = "npm run start"  # Start live-server to serve static files
+
