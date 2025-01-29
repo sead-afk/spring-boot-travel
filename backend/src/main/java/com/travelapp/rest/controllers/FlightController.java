@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/flights")
 @SecurityRequirement(name = "JWT Security")
-@CrossOrigin(origins = "http://localhost", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "http://127.0.0.1:3000", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
 public class FlightController {
 
     private final FlightService flightService;

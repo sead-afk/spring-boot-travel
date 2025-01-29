@@ -20,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/users")
 @SecurityRequirement(name = "JWT Security")
+@CrossOrigin(origins = "http://127.0.0.1:3000")
 public class UserController {
 
     private final UserService userService;
