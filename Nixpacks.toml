@@ -1,6 +1,5 @@
 [phases.build]
 # Build the Node.js frontend (located in the TravelFrontend folder)
-frontend = "cd TravelFrontend && npm install && npm run build"
 
 # Build the Spring Boot backend (located in the backend folder)
 backend = "cd backend && mvn clean package"
@@ -10,7 +9,6 @@ backend = "cd backend && mvn clean package"
 backend = "cd backend && java -jar target/*.jar"
 
 # Serve the Node.js frontend (if needed)
-frontend = "cd TravelFrontend && npm start"
 
 [env]
 # Environment variables for both frontend and backend
@@ -19,10 +17,8 @@ SPRING_PROFILES_ACTIVE = "prod"
 
 [files]
 # Include necessary files for both frontend and backend
-"TravelFrontend/" = "TravelFrontend"
 "backend/" = "backend"
 
 [ports]
 # Expose the necessary ports
 backend = 8080  # Spring Boot backend port
-frontend = 3000 # Node.js frontend port (if applicable)
