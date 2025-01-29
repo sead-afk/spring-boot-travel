@@ -17,7 +17,7 @@ SPRING_PROFILES_ACTIVE = "prod"
 
 [files]
 # Include necessary files for both frontend and backend
-"backend/" = "backend"
+"backend" = "backend"
 
 [ports]
 # Expose the necessary ports
