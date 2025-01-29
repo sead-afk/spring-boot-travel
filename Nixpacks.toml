@@ -1,0 +1,10 @@
+[builds]
+[[builds.frontend]]
+path = "TravelFrontend"
+build_command = "npm install"  # Install dependencies for the frontend
+start_command = "npm run start"  # Start the live-server to serve static files
+
+[[builds.backend]]
+path = "backend"
+build_command = "./mvnw package -DskipTests"  # Spring Boot build command
+start_command = "java -jar target/*.jar"  # Start Spring Boot backend
