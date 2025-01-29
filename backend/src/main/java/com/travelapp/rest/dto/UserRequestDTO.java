@@ -14,6 +14,7 @@ public class UserRequestDTO {
     private String email;
     private String username;
     private String password;
+    private String uniqueUsername;
 
     public  UserRequestDTO() { }
 
@@ -23,6 +24,7 @@ public class UserRequestDTO {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.username = user.getUsername();
+        this.uniqueUsername = user.getUniqueUsername();
         this.password = user.getPassword();
     }
 
@@ -34,8 +36,19 @@ public class UserRequestDTO {
         user.setEmail(email);
         user.setUsername(username);
         user.setPassword(password);
+        user.setUniqueUsername(uniqueUsername);
         user.setCreationDate(new Date());
         return user;
+    }
+
+
+
+    public String getUniqueUsername() {
+        return uniqueUsername;
+    }
+
+    public void setUniqueUsername(String uniqueUsername) {
+        this.uniqueUsername = uniqueUsername;
     }
 
     public UserType getUserType() {

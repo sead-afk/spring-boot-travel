@@ -53,10 +53,13 @@ public class BookingService {
 
         //booking.get().setUser(payload.getUser());
         booking.get().setType(payload.getType());
-        booking.get().setReferenceNumber(payload.getReferenceNumber());
+        //booking.get().setReferenceNumber(payload.getReferenceNumber());
         booking.get().setBookingDate(payload.getBookingDate());
         booking.get().setStartDate(payload.getStartDate());
         booking.get().setEndDate(payload.getEndDate());
+        booking.get().setUsername(payload.getUsername());
+        booking.get().setResourceid(payload.getResourceid());
+        booking.get().setDetails(payload.getDetails());
 
         bookingRepository.save(booking.get());
         return booking.get();
@@ -70,8 +73,15 @@ public class BookingService {
         return booking.get();
     }
 
-    public List<Booking> filter(String Type, String referenceNumber) {
+    /*public List<Booking> filter(String Type, String referenceNumber) {
         return bookingRepository.findAllByTypeOrReferenceNumberLike(Type, referenceNumber);
+    }*/
+
+    public List<Booking> getBookingsByUsername(String username)
+    {
+
+        var data = bookingRepository.findByUsername(username);
+        return data; // Assuming this method exists in the repository
     }
 
 }

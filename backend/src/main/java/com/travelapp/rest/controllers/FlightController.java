@@ -2,6 +2,8 @@ package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.Destination;
 import com.travelapp.core.model.Flight;
+import com.travelapp.core.model.Room;
+import com.travelapp.core.model.Tickets;
 import com.travelapp.core.service.FlightService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,7 +35,7 @@ public class FlightController {
         return flightService.addFlight(flight);
     }
 
-    @GetMapping(path = "/")
+    @GetMapping(path = {"", "/"})
     //@PreAuthorize("hasAuthority('ADMIN')")
     public List<Flight> getAll(){
         return flightService.getFlights();
@@ -60,8 +62,14 @@ public class FlightController {
     }
 
     @GetMapping(path = "/{flightId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Flight getFlightById(@PathVariable String flightId) throws Exception {
         return flightService.getFlightById(flightId);
+    }
+
+    @GetMapping("/{flightId}/tickets")
+    public List<Tickets> getTicketsByHotelId(@PathVariable String flightId) {
+        System.out.println("Fetching tickets for hotel ID: " + flightId);
+        return flightService.getTicketsByFlightId(flightId);
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.travelapp.core.model.enums.UserType;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +14,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-@Document
+@Document(collection = "users")
 public class User implements UserDetails{
 
     @Id
@@ -21,15 +22,20 @@ public class User implements UserDetails{
     private UserType userType;
     private String firstName;
     private String lastName;
+    @Indexed(unique = true)
     private String email;
+    @Indexed(unique = true)
     private String username;
     private String password;
     private Date creationDate;
+    private String uniqueUsername;
     @JsonSerialize(contentUsing = GrantedAuthoritySerializer.class)
     @JsonDeserialize(contentUsing = GrantedAuthorityDeserializer.class)
     private Collection<? extends GrantedAuthority> authorities;
 
-    public User(Date creationDate, String password, String username, String email, String lastName, String firstName, UserType userType, String id, Collection<? extends GrantedAuthority> authorities) {
+    public User(Date creationDate, String password,
+               String username,String uniqueUsername, String email, String lastName,
+                String firstName, UserType userType, String id, Collection<? extends GrantedAuthority> authorities) {
         this.creationDate = creationDate;
         this.password = password;
         this.username = username;
@@ -39,9 +45,18 @@ public class User implements UserDetails{
         this.userType = userType;
         this.id = id;
         this.authorities = authorities;
+        this.uniqueUsername = uniqueUsername;
     }
 
     public User() {
+    }
+
+    public String getUniqueUsername() {
+        return uniqueUsername;
+    }
+
+    public void setUniqueUsername(String uniqueUsername) {
+        this.uniqueUsername = uniqueUsername;
     }
 
     public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {

@@ -14,6 +14,7 @@ public class UserDTO {
     private UserType userType;
     private String email;
     private Date creationDate;
+    private String uniqueUsername;
     //private List<String> authorities;
 
     public UserDTO(User user) {
@@ -23,6 +24,15 @@ public class UserDTO {
         this.userType = user.getUserType();
         this.email = user.getEmail();
         this.creationDate = user.getCreationDate();
+        this.uniqueUsername = user.getUniqueUsername();
+    }
+
+    public String getUniqueUsername() {
+        return uniqueUsername;
+    }
+
+    public void setUniqueUsername(String uniqueUsername) {
+        this.uniqueUsername = uniqueUsername;
     }
 
     public String getId() {

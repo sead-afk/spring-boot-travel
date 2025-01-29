@@ -50,6 +50,7 @@ public class RoomController {
     public void deleteRoom(@PathVariable("roomId") String roomId) {
         roomService.deleteRoom(roomId);
     }
+
     /*@GetMapping(path = "/filter")
     @PreAuthorize("hasAnyAuthority('MEMBER', 'ADMIN')")
     public List<Room> filterRoom(

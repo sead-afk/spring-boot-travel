@@ -3,14 +3,16 @@ package com.travelapp.rest.controllers;
 import com.travelapp.core.model.Booking;
 import com.travelapp.core.service.BookingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
 @RestController
-@RequestMapping(path = "api/v1/booking")
+@RequestMapping(path = "api/bookings")
 @SecurityRequirement(name = "JWT Security")
+@CrossOrigin(origins = "http://localhost")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -26,7 +28,7 @@ public class BookingController {
     }*/
 
     @PostMapping(path = "/add")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public Booking addBooking(@RequestBody Booking booking){
         return bookingService.addBooking(booking);
     }
@@ -48,18 +50,25 @@ public class BookingController {
     public void deleteBooking(@RequestBody Booking booking) {
         bookingService.deleteBooking(booking);
     }
-    @GetMapping(path = "/filter")
+    /*@GetMapping(path = "/filter")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Booking> filterBooking(
             @RequestParam("type") String type,
             @RequestParam("referenceNumber") String referenceNumber
     ){
         return bookingService.filter(type, referenceNumber);
-    }
+    }*/
 
     @GetMapping(path = "/{bookingId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Booking getBookingById(@PathVariable String bookingId) throws Exception {
         return bookingService.getBookingById(bookingId);
+    }
+
+    @GetMapping("/user/{username}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public ResponseEntity<List<Booking>> getUserBookings(@PathVariable String username) {
+        List<Booking> bookings = bookingService.getBookingsByUsername(username);
+        return ResponseEntity.ok(bookings);
     }
 }

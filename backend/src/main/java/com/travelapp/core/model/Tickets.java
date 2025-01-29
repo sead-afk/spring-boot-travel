@@ -7,19 +7,17 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
-
 @Getter
 @Setter
-@Document(collection = "rooms")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Room {
+@Document
+public class Tickets {
+
     @Id
     private String id;
-    //private String userid;
-    private int roomNumber;
-    private double pricePerNight;
-    private List<String> amenities;
+    private String seatNumber;
     private boolean availability;
+    private double price;
+
 }

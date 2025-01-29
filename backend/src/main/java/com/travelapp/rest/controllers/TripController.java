@@ -13,7 +13,7 @@ import java.util.List;
 @SecurityRequirement(name = "JWT Security")
 public class TripController {
     
-    private final TripService tripService;
+    /*private final TripService tripService;
 
     public TripController(TripService tripService) {
         this.tripService = tripService;
@@ -21,7 +21,7 @@ public class TripController {
 
     @GetMapping("/my-trips")
     @PreAuthorize("hasRole('MEMBER')")
-    public List<Trip> getCurrentUserTrips() {
+    /*public List<Trip> getCurrentUserTrips() {
         return tripService.getCurrentUserTrips();
     }
 
@@ -54,10 +54,10 @@ public class TripController {
             @RequestParam("name") String name
     ){
         return tripService.filter(tripType, name);
-    }*/
+    }
     @GetMapping(path = "/{tripId}")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Trip getTripById(@PathVariable String tripId) throws Exception {
         return tripService.getTripById(tripId);
-    }
+    }*/
 }

@@ -2,6 +2,7 @@ package com.travelapp.rest.controllers;
 
 import com.travelapp.core.model.Flight;
 import com.travelapp.core.model.Hotel;
+import com.travelapp.core.model.Room;
 import com.travelapp.core.service.HotelService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -9,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/hotels")
@@ -35,14 +37,14 @@ public class HotelController {
         return hotelService.addHotel(hotel);
     }
 
-    @GetMapping(path = "/")
+    @GetMapping(path = {"", "/"})
     //@PreAuthorize("hasAnyAuthority('MEMBER', 'ADMIN')")
     public List<Hotel> getAll(){
         return hotelService.getHotels();
     }
 
     @PutMapping(path = "/{hotelId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     public Hotel updateHotel(@PathVariable("hotelId") String hotelId, @RequestBody Hotel hotelpayload) throws Exception {
         return hotelService.updateHotel(hotelId, hotelpayload);
     }
@@ -66,4 +68,15 @@ public class HotelController {
     public Hotel getHotelById(@PathVariable String hotelId) throws Exception {
         return hotelService.getHotelById(hotelId);
     }
+
+    @GetMapping("/{hotelId}/rooms")
+    public List<Room> getRoomsByHotelId(@PathVariable String hotelId) {
+        System.out.println("Fetching rooms for hotel ID: " + hotelId);
+        return hotelService.getRoomsByHotelId(hotelId);
+    }
+
+//    @GetMapping("/rooms/{roomId}")
+//    public Room getRoomById(@PathVariable String roomId) {
+//        return hotelService.getRoomById(roomId);
+//    }
 }

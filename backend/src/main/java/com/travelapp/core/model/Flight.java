@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Document(collection = "flights")
 public class Flight {
@@ -16,9 +17,9 @@ public class Flight {
     private String arrivalAirport;
     private LocalDateTime departureTime;
     private LocalDateTime arrivalTime;
-    private double price;
+    private List<Tickets> tickets;
 
-    public Flight(String id, String airline, String flightNumber, String departureAirport, String arrivalAirport, LocalDateTime departureTime, LocalDateTime arrivalTime, double price) {
+    public Flight(String id, String airline, String flightNumber, String departureAirport, String arrivalAirport, LocalDateTime departureTime, LocalDateTime arrivalTime) {
         this.id = id;
         this.airline = airline;
         this.flightNumber = flightNumber;
@@ -26,7 +27,14 @@ public class Flight {
         this.arrivalAirport = arrivalAirport;
         this.departureTime = departureTime;
         this.arrivalTime = arrivalTime;
-        this.price = price;
+    }
+
+    public List<Tickets> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Tickets> tickets) {
+        this.tickets = tickets;
     }
 
     public String getId() {
@@ -85,11 +93,4 @@ public class Flight {
         this.arrivalTime = arrivalTime;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
 }

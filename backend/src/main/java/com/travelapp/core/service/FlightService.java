@@ -1,7 +1,6 @@
 package com.travelapp.core.service;
 
-import com.travelapp.core.model.Flight;
-import com.travelapp.core.model.User;
+import com.travelapp.core.model.*;
 import com.travelapp.core.repository.FlightRepository;
 import com.travelapp.core.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,7 +53,6 @@ public class FlightService {
         flight.get().setArrivalAirport(payload.getArrivalAirport());
         flight.get().setDepartureTime(payload.getDepartureTime());
         flight.get().setArrivalTime(payload.getArrivalTime());
-        flight.get().setPrice(payload.getPrice());
 
         flightRepository.save(flight.get());
         return flight.get();
@@ -70,5 +68,15 @@ public class FlightService {
 
     public List<Flight> filter(String departureAirport, String arrivalAirport) {
         return flightRepository.findFlightByDepartureAirportAndArrivalAirport(departureAirport, arrivalAirport);
+    }
+
+    public List<Tickets> getTicketsByFlightId(String flightId) {
+        Flight flight = null;
+        try {
+            flight = getFlightById(flightId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return flight.getTickets();
     }
 }

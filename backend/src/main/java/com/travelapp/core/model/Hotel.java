@@ -22,5 +22,6 @@ public class Hotel {
     private String location;
     private String description;
     private List<String> amenities;
+    private List<Room> rooms;
 
 }

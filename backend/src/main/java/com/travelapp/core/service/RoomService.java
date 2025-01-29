@@ -1,7 +1,9 @@
 package com.travelapp.core.service;
 
+import com.travelapp.core.model.Hotel;
 import com.travelapp.core.model.Room;
 import com.travelapp.core.model.User;
+import com.travelapp.core.repository.HotelRepository;
 import com.travelapp.core.repository.RoomRepository;
 import com.travelapp.core.repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -11,10 +13,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @AllArgsConstructor
 @Service
 public class RoomService {
 
+    private final HotelRepository hotelRepository;
     private final RoomRepository roomRepository;
 
     /*public List<Room> getCurrentUserRooms() {  //my booked Rooms
@@ -24,7 +29,10 @@ public class RoomService {
     }*/
 
     public List<Room> getRooms() {
-        return roomRepository.findAll();
+        List<Hotel> hotels = hotelRepository.findAll();
+        return hotels.stream()
+                .flatMap(hotel -> hotel.getRooms().stream())
+                .collect(Collectors.toList());
     }
 
     public Room addRoom(Room room) {
@@ -49,9 +57,6 @@ public class RoomService {
             throw new Exception("Cannot find room with provided payload");
 
         room.get().setRoomNumber(payload.getRoomNumber());
-        room.get().setHotel(payload.getHotel());
-        room.get().setDescription(payload.getDescription());
-        room.get().setAmenities(payload.getAmenities());
         room.get().setAmenities(payload.getAmenities());
 
         roomRepository.save(room.get());

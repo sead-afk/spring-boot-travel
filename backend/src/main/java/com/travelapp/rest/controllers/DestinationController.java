@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping(path = "api/destinations")
 @SecurityRequirement(name = "JWT Security")
 public class DestinationController {
-    private final DestinationService destinationService;
+    /*private final DestinationService destinationService;
 
     public DestinationController(DestinationService destinationService) {
         this.destinationService = destinationService;
@@ -62,5 +62,5 @@ public class DestinationController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public Destination getDestinationById(@PathVariable String destinationId) throws Exception {
         return destinationService.getDestinationById(destinationId);
-    }
+    }*/
 }

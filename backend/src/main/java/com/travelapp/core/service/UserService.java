@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -84,9 +85,14 @@ public class UserService {
         };
     }
 
-    public User getCurrentUserAccountDetails() {
+    /*public User getCurrentUserAccountDetails() {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return user;
+    }*/
+
+    public User getUserProfile(String email) {
+        return userRepository.findUserByEmail(email)
+                .orElseThrow(() -> new NoSuchElementException("Element not found in the collection."));
     }
 }

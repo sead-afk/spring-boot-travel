@@ -2,6 +2,7 @@ package com.travelapp.core.service;
 
 import com.travelapp.core.model.Flight;
 import com.travelapp.core.model.Hotel;
+import com.travelapp.core.model.Room;
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.HotelRepository;
 import com.travelapp.core.repository.UserRepository;
@@ -16,11 +17,9 @@ import java.util.Optional;
 @Service
 public class HotelService {
     private final HotelRepository hotelRepository;
-    private UserRepository userRepository;
 
-    public HotelService(HotelRepository hotelRepository, UserRepository userRepository) {
+    public HotelService(HotelRepository hotelRepository) {
         this.hotelRepository = hotelRepository;
-        this.userRepository = userRepository;
     }
 
     /*public List<Hotel> getCurrentUserHotels() {  //my booked Hotels
@@ -34,8 +33,10 @@ public class HotelService {
     }
 
     public Hotel addHotel(Hotel hotel) {
-        var username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        User user = userRepository.findByUsername(username);
+//        var username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+//        //User user = userRepository.findByUsername(username);
+//        Optional<User> optionalUser = userRepository.findByUsername(username);
+//        User user = optionalUser.orElse(new User());
         //hotel.setUserid(user.getId());
         return hotelRepository.save(hotel);
     }
@@ -63,13 +64,30 @@ public class HotelService {
     }
 
     public Hotel getHotelById(String hotelId) throws Exception {
-        Optional<Hotel> hotel = hotelRepository.findById(hotelId);
-        if(hotel.isEmpty())
-            throw new Exception("Cannot find hotel with provided payload");
-
-        return hotel.get();
+        return hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new RuntimeException("Hotel not found with ID: " + hotelId));
     }
 
+    public List<Room> getRoomsByHotelId(String hotelId) {
+        Hotel hotel = null;
+        try {
+            hotel = getHotelById(hotelId);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return hotel.getRooms();
+    }
+
+//    public Room getRoomById(String roomId) {
+//        Hotel hotel = hotelRepository.findHotelByRoomId(roomId);
+//        if (hotel == null) {
+//            throw new RuntimeException("Room not found with ID: " + roomId);
+//        }
+//        return hotel.getRooms().stream()
+//                .filter(room -> room.getId().equals(roomId))
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
+//    }
     /*public List<Hotel> filter(Double price, String location) {
         return hotelRepository.findHotelByPricePerNightGreaterThanAndLocation(price, location);
     }*/

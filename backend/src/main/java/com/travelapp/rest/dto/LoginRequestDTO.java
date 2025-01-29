@@ -15,4 +15,12 @@ public class LoginRequestDTO {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "LoginRequestDTO{" +
+                "email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
 }

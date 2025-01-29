@@ -22,18 +22,18 @@ public class DestinationService {
         this.userRepository = userRepository;
     }
 
-    public List<Destination> getCurrentUserDestinations() {
+    /*public List<Destination> getCurrentUserDestinations() {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return destinationRepository.findByUserId(user);
-    }
+    }*/
 
-    public Destination addDestination(Destination destination) {
+    /*public Destination addDestination(Destination destination) {
         var username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         destination.setUserId(user.getId());
         return destinationRepository.save(destination);
-    }
+    }*/
 
     public Destination updateDestination(String destinationId, Destination payload) throws Exception {
         Optional<Destination> destination = destinationRepository.findById(destinationId);

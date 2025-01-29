@@ -2,19 +2,16 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/traveldb
-      #host: localhost
-      #port: 27017
-      #database: traveldb
 
 logging:
   level:
-    org:
-      springframework:
-        data:
-          mongodb:
-            core:
-              org.springframework.data.mongodb.core.MongoTemplate: INFO
+    org.springframework:
+      security: DEBUG
+      data.mongodb.core.MongoTemplate: INFO
 
 security:
   jwt:
     secret: 'YF5WkJBdXRw9DBz1gqVEtIdag0x5RNxH7wHf0cH15hnobA4lC5'
+    expiration-time: 3600000 # Token expiration in milliseconds (1 hour)
+
+

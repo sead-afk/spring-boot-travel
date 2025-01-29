@@ -25,11 +25,11 @@ public class TripService {
         this.tripRepository = tripRepository;
     }
 
-    public List<Trip> getCurrentUserTrips() {
+    /*public List<Trip> getCurrentUserTrips() {
         String username = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
         User user = userRepository.findByUsername(username);
         return tripRepository.findByUserId(user.getId());
-    }
+    }*/
 
     public Trip addTrip(Trip trip) {
         return tripRepository.save(trip);
