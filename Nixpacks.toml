@@ -19,8 +19,8 @@ SPRING_PROFILES_ACTIVE = "prod"
 
 [files]
 # Include necessary files for both frontend and backend
-"TravelFrontend/" = "/TravelFrontend"
-"backend/" = "/backend"
+"TravelFrontend/" = "TravelFrontend"
+"backend/" = "backend"
 
 [ports]
 # Expose the necessary ports
