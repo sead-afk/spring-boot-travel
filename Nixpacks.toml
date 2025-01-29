@@ -12,5 +12,5 @@ start_command = "java -jar target/*.jar"  # Command to start the Spring Boot app
 [[builds.frontend]]
 path = "TravelFrontend"  # Path to the frontend folder
 build_command = "npm install"  # Install frontend dependencies (like live-server)
-start_command = "npm run start"  # Start live-server to serve static files
+start_command = "npm start"  # Start live-server to serve static files
 
