@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping("api/auth")
 @SecurityRequirement(name = "JWT Security")
 @PreAuthorize("permitAll()")
-@CrossOrigin(origins = "http://127.0.0.1:3000")
+@CrossOrigin(origins = "https://travelfrontend-production.up.railway.app")
 public class AuthController {
 
     private final AuthService authService;

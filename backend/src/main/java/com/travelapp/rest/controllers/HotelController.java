@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "api/hotels")
 @SecurityRequirement(name = "JWT Security")
-@CrossOrigin(origins = "http://127.0.0.1:3000", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
+@CrossOrigin(origins = "https://travelfrontend-production.up.railway.app", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.OPTIONS})
 public class HotelController {
 
     private final HotelService hotelService;

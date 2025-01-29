@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/bookings")
 @SecurityRequirement(name = "JWT Security")
-@CrossOrigin(origins = "http://127.0.0.1:3000")
+@CrossOrigin(origins = "https://travelfrontend-production.up.railway.app")
 public class BookingController {
 
     private final BookingService bookingService;
