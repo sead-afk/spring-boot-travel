@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/traveldb
+      uri: mongodb+srv://sead-afk:w2XEsXn2Q_aq2Db@cluster0.mdzkpw1.mongodb.net/travelDB?retryWrites=true&w=majority
 
 logging:
   level:
