@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping("api/auth")
 @SecurityRequirement(name = "JWT Security")
 @PreAuthorize("permitAll()")
-@CrossOrigin(origins = "https://travelfrontend-production.up.railway.app")
+@CrossOrigin(origins = "https://travelwithsead.netlify.app")
 public class AuthController {
 
     private final AuthService authService;

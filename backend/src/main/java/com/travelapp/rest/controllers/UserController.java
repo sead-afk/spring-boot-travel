@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "api/users")
 @SecurityRequirement(name = "JWT Security")
-@CrossOrigin(origins = "https://travelfrontend-production.up.railway.app")
+@CrossOrigin(origins = "https://travelwithsead.netlify.app")
 public class UserController {
 
     private final UserService userService;
