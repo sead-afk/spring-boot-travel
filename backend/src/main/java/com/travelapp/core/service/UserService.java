@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import com.travelapp.core.exception.UserNotFoundException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
