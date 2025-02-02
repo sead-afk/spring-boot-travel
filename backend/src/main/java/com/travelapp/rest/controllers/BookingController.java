@@ -40,17 +40,6 @@ public class BookingController {
         }
     }
 
-
-
-    // Deduct the amount from the user's account balance
-        user.setBalance(user.getAccountBalance() - booking.getAmount());
-        userService.updateUser(user);  // Assuming there's an updateUser method to save the updated balance
-
-        // Proceed with booking creation
-        return bookingService.addBooking(booking);
-    }
-
-
     @GetMapping(path = "/")
     @PreAuthorize("hasAuthority('ADMIN')")
     public List<Booking> getAll(){
