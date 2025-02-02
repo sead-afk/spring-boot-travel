@@ -43,12 +43,12 @@ public class BookingService {
         User user = userService.getUserProfile(username);
 
         // Check if the user has sufficient balance
-        if (user.getAccountBalance() < booking.getAmount()) {
+        if (user.getBalance() < booking.getAmount()) {
             throw new IllegalArgumentException("Insufficient balance to complete the booking.");
         }
 
         // Deduct the amount from the user's account balance
-        user.setAccountBalance(user.getAccountBalance() - booking.getAmount());
+        user.setBalance(user.getBalance() - booking.getAmount());
 
         // Update the user with the new balance
         userService.updateUser(user);
