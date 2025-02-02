@@ -4,6 +4,7 @@ import com.travelapp.core.model.Booking;
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.BookingRepository;
 import com.travelapp.core.repository.UserRepository;
+import com.travelapp.rest.dto.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +36,7 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public Booking addBooking(Booking booking) {
+    public Booking addBooking(Booking booking) throws Exception {
         // Retrieve the username from the authentication context
         var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = userDetails.getUsername();
@@ -50,9 +51,9 @@ public class BookingService {
 
         // Deduct the amount from the user's account balance
         user.setBalance(user.getBalance() - booking.getAmount());
-
+        var userDto = new UserRequestDTO(user);
         // Update the user with the new balance
-        userService.updateUser(user);
+        userService.updateUser(user.getId(),userDto);
 
         // Now, create and save the booking
         return bookingRepository.save(booking);

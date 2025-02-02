@@ -15,8 +15,16 @@ public class UserRequestDTO {
     private String username;
     private String password;
     private String uniqueUsername;
-
+    private Double balance;
     public  UserRequestDTO() { }
+
+    public Double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(Double balance) {
+        this.balance = balance;
+    }
 
     public UserRequestDTO(User user) {
         this.userType = user.getUserType();
@@ -26,6 +34,7 @@ public class UserRequestDTO {
         this.username = user.getUsername();
         this.uniqueUsername = user.getUniqueUsername();
         this.password = user.getPassword();
+        this.balance=user.getBalance();
     }
 
     public User toEntity() {

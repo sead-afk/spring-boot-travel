@@ -34,5 +34,4 @@ public class Booking {
     @Nullable
     private LocalDate endDate;
     private double amount;
-
 }
