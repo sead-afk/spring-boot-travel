@@ -75,7 +75,7 @@ public class UserService {
         if (payload.getBalance() != null && !payload.getBalance().equals(existingUser.getBalance())) {
             double newBalance = payload.getBalance();
             // Ensure sufficient funds if balance is being deducted (if applicable)
-            if (newBalance < existingUser.getBalance()) {
+            if (newBalance > existingUser.getBalance()) {
                 throw new IllegalArgumentException("Cannot deduct balance, insufficient funds.");
             }
             existingUser.setBalance(newBalance);
