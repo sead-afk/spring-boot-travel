@@ -36,7 +36,7 @@ public class User implements UserDetails{
 
     public User(Date creationDate, String password,
                String username,String uniqueUsername, String email, String lastName,
-                String firstName, UserType userType, String id, double balance Collection<? extends GrantedAuthority> authorities) {
+                String firstName, UserType userType, String id, double balance, Collection<? extends GrantedAuthority> authorities) {
         this.creationDate = creationDate;
         this.password = password;
         this.username = username;
