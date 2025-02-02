@@ -15,8 +15,9 @@ import java.util.Optional;
 @Service
 public class BookingService {
 
+    @Autowired
+    private UserService userService;
     private final BookingRepository bookingRepository;
-
     private UserRepository userRepository;
 
     public BookingService(BookingRepository bookingRepository, UserRepository userRepository) {
