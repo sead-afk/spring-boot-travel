@@ -95,4 +95,11 @@ public class UserService {
         return userRepository.findUserByEmail(email)
                 .orElseThrow(() -> new NoSuchElementException("Element not found in the collection."));
     }
+
+    public void addFundsToUser(String username, double amount) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setBalance(user.getBalance() + amount);
+        userRepository.save(user);
+    }
 }

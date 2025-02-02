@@ -29,13 +29,14 @@ public class User implements UserDetails{
     private String password;
     private Date creationDate;
     private String uniqueUsername;
+    private double balance;
     @JsonSerialize(contentUsing = GrantedAuthoritySerializer.class)
     @JsonDeserialize(contentUsing = GrantedAuthorityDeserializer.class)
     private Collection<? extends GrantedAuthority> authorities;
 
     public User(Date creationDate, String password,
                String username,String uniqueUsername, String email, String lastName,
-                String firstName, UserType userType, String id, Collection<? extends GrantedAuthority> authorities) {
+                String firstName, UserType userType, String id, double balance Collection<? extends GrantedAuthority> authorities) {
         this.creationDate = creationDate;
         this.password = password;
         this.username = username;
@@ -46,9 +47,18 @@ public class User implements UserDetails{
         this.id = id;
         this.authorities = authorities;
         this.uniqueUsername = uniqueUsername;
+        this.balance = balance;
     }
 
     public User() {
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     public String getUniqueUsername() {

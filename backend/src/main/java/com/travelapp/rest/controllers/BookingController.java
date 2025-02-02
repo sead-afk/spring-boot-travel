@@ -29,8 +29,8 @@ public class BookingController {
 
     @PostMapping(path = "/add")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Booking addBooking(@RequestBody Booking booking){
-        return bookingService.addBooking(booking);
+    public Booking addBooking(@RequestBody Booking booking, @RequestParam String username) {
+        return bookingService.addBooking(booking, username);
     }
 
     @GetMapping(path = "/")
@@ -71,4 +71,5 @@ public class BookingController {
         List<Booking> bookings = bookingService.getBookingsByUsername(username);
         return ResponseEntity.ok(bookings);
     }
+
 }

@@ -81,4 +81,11 @@ public class UserController {
         User user = userService.getUserProfile(email);
         return ResponseEntity.ok(user);
     }
+
+    @PostMapping("/add-funds")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public ResponseEntity<String> addFunds(@RequestParam String username, @RequestParam double amount) {
+        userService.addFundsToUser(username, amount);
+        return ResponseEntity.ok("Funds added successfully");
+    }
 }
