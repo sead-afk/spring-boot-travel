@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.travelapp.core.exception.UserNotFoundException;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -94,12 +93,12 @@ public class UserService {
 
     public User getUserProfile(String email) {
         return userRepository.findUserByEmail(email)
-                .orElseThrow(() -> new NoSuchElementException("Element not found in the collection."));
+                .orElseThrow(() -> new NoSuchElementException("user not found in the collection."));
     }
 
     public void addFundsToUser(String username, double amount) {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UserNotFoundException("User not found"));
+                .orElseThrow(() -> new NoSuchElementException("user not found in the collection."));
         user.setBalance(user.getBalance() + amount);
         userRepository.save(user);
     }
