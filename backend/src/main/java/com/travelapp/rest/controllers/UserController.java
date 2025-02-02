@@ -5,6 +5,7 @@ import com.travelapp.core.model.User;
 import com.travelapp.core.service.JwtService;
 import com.travelapp.core.service.UserService;
 import com.travelapp.rest.dto.UserDTO;
+import com.travelapp.rest.dto.UserFundsDTO;
 import com.travelapp.rest.dto.UserRequestDTO;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,8 +85,13 @@ public class UserController {
 
     @PostMapping("/add-funds")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public ResponseEntity<String> addFunds(@RequestParam String username, @RequestParam double amount) {
-        userService.addFundsToUser(username, amount);
+    public ResponseEntity<String> addFunds(@RequestBody UserFundsDTO userPayload) {
+
+        var user1 = (UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        var email = user1.getUsername();
+
+        userService.addFundsToUser(email, userPayload.getAmount());
         return ResponseEntity.ok("Funds added successfully");
     }
 }
