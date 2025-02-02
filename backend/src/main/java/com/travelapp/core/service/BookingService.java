@@ -34,20 +34,28 @@ public class BookingService {
         return bookingRepository.findAll();
     }
 
-    public Booking addBooking(Booking booking, String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+    public Booking addBooking(Booking booking) {
+        // Retrieve the username from the authentication context
+        var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
 
-        if (user.getBalance() < booking.getAmount()) {
-            throw new RuntimeException("Insufficient balance");
+        // Retrieve the user based on the username (email)
+        User user = userService.getUserProfile(username);
+
+        // Check if the user has sufficient balance
+        if (user.getAccountBalance() < booking.getAmount()) {
+            throw new IllegalArgumentException("Insufficient balance to complete the booking.");
         }
 
-        // Deduct balance and save both user and booking
-        user.setBalance(user.getBalance() - booking.getAmount());
-        userRepository.save(user);
+        // Deduct the amount from the user's account balance
+        user.setAccountBalance(user.getAccountBalance() - booking.getAmount());
+
+        // Update the user with the new balance
+        userService.updateUser(user);
+
+        // Now, create and save the booking
         return bookingRepository.save(booking);
     }
-
 
     public void deleteBooking(Booking payload) {
         Optional<Booking> bookingOptional = bookingRepository.findById(payload.getId());

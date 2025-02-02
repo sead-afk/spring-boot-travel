@@ -29,9 +29,27 @@ public class BookingController {
 
     @PostMapping(path = "/add")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public Booking addBooking(@RequestBody Booking booking, @RequestParam String username) {
-        return bookingService.addBooking(booking, username);
+    public ResponseEntity<Booking> addBooking(@RequestBody Booking booking) {
+        try {
+            // Call the service to handle the booking and payment deduction logic
+            Booking newBooking = bookingService.addBooking(booking);
+            return ResponseEntity.ok(newBooking);
+        } catch (IllegalArgumentException e) {
+            // Handle insufficient funds error, can return a 403 Forbidden or a 400 Bad Request
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
     }
+
+
+
+    // Deduct the amount from the user's account balance
+        user.setBalance(user.getAccountBalance() - booking.getAmount());
+        userService.updateUser(user);  // Assuming there's an updateUser method to save the updated balance
+
+        // Proceed with booking creation
+        return bookingService.addBooking(booking);
+    }
+
 
     @GetMapping(path = "/")
     @PreAuthorize("hasAuthority('ADMIN')")

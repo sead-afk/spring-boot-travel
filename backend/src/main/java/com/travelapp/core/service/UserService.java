@@ -53,16 +53,41 @@ public class UserService {
         userRepository.deleteById(userId);
     }
 
-    public UserDTO updateUser(String userId, UserRequestDTO  payload) throws Exception {
-        Optional<User> user = userRepository.findById(userId);
-        if(user.isEmpty())
-            throw new Exception("Cannot find user with provided payload");
+    public UserDTO updateUser(String userId, UserRequestDTO payload) throws Exception {
+        // Find the user by ID
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            throw new Exception("Cannot find user with the provided userId");
+        }
 
+        User existingUser = userOpt.get();
+
+        // If the balance is being updated, ensure no insufficient funds are present
+        if (payload.getBalance() != null && payload.getBalance() < 0) {
+            throw new IllegalArgumentException("Account balance cannot be negative.");
+        }
+
+        // Update the user details with the new information from the payload
         User updatedUser = payload.toEntity();
-        updatedUser.setId(user.get().getId());
-        updatedUser = userRepository.save(updatedUser);
+        updatedUser.setId(existingUser.getId());
+
+        // If the account balance has changed, update it
+        if (payload.getBalance() != null && !payload.getBalance().equals(existingUser.getBalance())) {
+            double newBalance = payload.getBalance();
+            // Ensure sufficient funds if balance is being deducted (if applicable)
+            if (newBalance < existingUser.getBalance()) {
+                throw new IllegalArgumentException("Cannot deduct balance, insufficient funds.");
+            }
+            existingUser.setBalance(newBalance);
+        }
+
+        // Save the updated user data
+        updatedUser = userRepository.save(existingUser);
+
+        // Return updated user data as a DTO
         return new UserDTO(updatedUser);
     }
+
 
     public UserDTO getUserById(String userId) throws Exception {
         Optional<User> user = userRepository.findById(userId);
