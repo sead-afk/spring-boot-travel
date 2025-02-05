@@ -19,15 +19,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class AuthService {
-    private final UserRepository userRepository;
 
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     @Autowired
     private JwtService jwtService;
@@ -35,9 +36,9 @@ public class AuthService {
     private AuthenticationManager authenticationManager;
 
 
-    public AuthService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+//    public AuthService(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
 
     public UserDTO signUp(UserRequestDTO userRequestDTO) {
         if (userRepository.findUserByEmail(userRequestDTO.getEmail()).isPresent()) {
@@ -55,20 +56,27 @@ public class AuthService {
 
     public LoginDTO signIn(LoginRequestDTO loginRequestDTO) {
         try {
-            authenticationManager.authenticate(
+           authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
                             loginRequestDTO.getEmail(),
                             loginRequestDTO.getPassword()
                     )
             );
+
         } catch (BadCredentialsException e) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid email or password");
         }
 
         System.out.println("sejo");
 
-        User user = userRepository.findUserByEmail(loginRequestDTO.getEmail())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist"));
+
+        Optional<User> userOpt = userRepository.findUserByEmail(loginRequestDTO.getEmail());
+
+        if(userOpt.isEmpty())
+        {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User does not exist");
+        }
+        var user = userOpt.get();
 
         Map<String, String> claims = Map.of("email", user.getEmail());
         String jwt = jwtService.generateToken(claims, user);

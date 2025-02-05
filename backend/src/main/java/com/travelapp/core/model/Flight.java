@@ -1,11 +1,13 @@
 package com.travelapp.core.model;
 
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@NoArgsConstructor
 @Document(collection = "flights")
 public class Flight {
     @Id

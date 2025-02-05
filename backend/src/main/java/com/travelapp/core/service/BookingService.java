@@ -19,11 +19,11 @@ public class BookingService {
     @Autowired
     private UserService userService;
     private final BookingRepository bookingRepository;
-    private UserRepository userRepository;
 
-    public BookingService(BookingRepository bookingRepository, UserRepository userRepository) {
+
+    public BookingService(BookingRepository bookingRepository, UserService userService) {
         this.bookingRepository = bookingRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     /*public List<Booking> getCurrentUserBookings() {
