@@ -83,7 +83,7 @@ public class BookingController {
         HttpHeaders headers = new HttpHeaders();
         headers.setCacheControl(CacheControl.noCache().getHeaderValue());
         List<Booking> bookings = bookingService.getBookingsByUsername(username);
-        return ResponseEntity.ok(bookings);
+        return new ResponseEntity<>(bookings, headers, HttpStatus.OK);
     }
 
 }
