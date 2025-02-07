@@ -3,6 +3,8 @@ package com.travelapp.rest.controllers;
 import com.travelapp.core.model.Booking;
 import com.travelapp.core.service.BookingService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,6 +80,8 @@ public class BookingController {
     @GetMapping("/user/{username}")
     @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseEntity<List<Booking>> getUserBookings(@PathVariable String username) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setCacheControl(CacheControl.noCache().getHeaderValue());
         List<Booking> bookings = bookingService.getBookingsByUsername(username);
         return ResponseEntity.ok(bookings);
     }
