@@ -1,25 +1,62 @@
 package com.travelapp.core.service;
 
-import com.travelapp.core.model.Flight;
-import com.travelapp.core.model.Hotel;
-import com.travelapp.core.model.Room;
-import com.travelapp.core.model.User;
+import com.travelapp.core.model.*;
 import com.travelapp.core.repository.HotelRepository;
 import com.travelapp.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class HotelService {
     private final HotelRepository hotelRepository;
+    private final BookingService bookingService;
 
-    public HotelService(HotelRepository hotelRepository) {
+    public HotelService(HotelRepository hotelRepository, BookingService bookingService) {
         this.hotelRepository = hotelRepository;
+        this.bookingService = bookingService;
+    }
+
+    @Transactional
+    public Booking bookRoom(String hotelId, String roomId, LocalDate startDate, LocalDate endDate, double amount) throws Exception {
+        // Retrieve the hotel document
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new RuntimeException("Hotel not found with ID: " + hotelId));
+
+        // Find the desired room in the hotel's list
+        Room roomToBook = hotel.getRooms().stream()
+                .filter(room -> room.getId() != null && room.getId().equals(roomId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
+
+        // Check availability
+        if (!roomToBook.isAvailability()) {
+            throw new RuntimeException("Room is not available for booking.");
+        }
+
+        // Mark the room as booked
+        roomToBook.setAvailability(false);
+        hotelRepository.save(hotel);
+
+        // Create the Booking record (user details extracted in addBooking)
+        Booking booking = new Booking();
+        booking.setResourceid(hotelId);
+        booking.setDetails(roomId);
+        booking.setType("HOTEL");
+        booking.setStartDate(startDate);
+        booking.setEndDate(endDate);
+        booking.setAmount(amount);
+        booking.setBookingDate(LocalDate.now());
+
+        // If addBooking fails, the transaction is rolled back,
+        // so the room's availability update will be reverted.
+        return bookingService.addBooking(booking);
     }
 
     /*public List<Hotel> getCurrentUserHotels() {  //my booked Hotels

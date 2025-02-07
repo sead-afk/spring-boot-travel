@@ -1,68 +1,32 @@
-//package com.travelapp.core.model;
-//
-//import org.assertj.core.api.AssertionsForInterfaceTypes;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//import java.time.LocalDate;
-//import java.util.ArrayList;
-//import java.util.Arrays;
-//import java.util.List;
-//
-//@SpringBootTest
-//public class HotelTest {
-//
-//    @Test
-//    void shouldCreateNewHotel() {
-//        List list = new ArrayList<String>(){{
-//            add("pool");
-//            add("restaurant");
-//            add("rooms");
-//        }};
-//        Hotel hotel = new Hotel("id12211",
-//                "Messi",
-//                "Spain",
-//                "egzotican i lijep",
-//                list);
-//
-//        Assertions.assertEquals("id12211", hotel.getId());
-//        Assertions.assertEquals("Messi", hotel.getName());
-//        Assertions.assertEquals("Spain", hotel.getLocation());
-//        Assertions.assertEquals("egzotican i lijep", hotel.getDescription());
-//        Assertions.assertEquals(list, hotel.getAmenities());
-//
-//    }
-//
-//    /*@Test
-//    void shouldCompareTwoBooks() {
-//        User jeff = new User();
-//        Booking booking1 = new Booking(
-//                "someId123",
-//                jeff,
-//                "Test Hotel",
-//                "90678",
-//                LocalDate.of(2015, 1, 15),
-//                LocalDate.of(2015, 4, 15),
-//                LocalDate.of(2015, 5, 15),
-//                20
-//        );
-//
-//
-//        Booking booking2 = new Booking(
-//                "someId123",
-//                jeff,
-//                "Test Hotel",
-//                "90678",
-//                LocalDate.of(2015, 1, 15),
-//                LocalDate.of(2015, 4, 15),
-//                LocalDate.of(2015, 5, 15),
-//                20
-//        );
-//
-//        AssertionsForInterfaceTypes
-//                .assertThat(booking1)
-//                .usingRecursiveComparison()
-//                .isEqualTo(booking2);
-//    }*/
-//}
+package com.travelapp.core.model;
+
+import org.junit.jupiter.api.Test;
+import java.util.Arrays;
+import java.util.Collections;
+import static org.junit.jupiter.api.Assertions.*;
+
+class HotelTest {
+
+    @Test
+    void testHotelGettersAndSetters() {
+        Hotel hotel = new Hotel();
+        hotel.setId("h1");
+        hotel.setName("Seaside Resort");
+        hotel.setLocation("Beach City");
+        hotel.setDescription("A lovely seaside hotel");
+        hotel.setAmenities(Arrays.asList("Pool", "WiFi"));
+
+        // For rooms, you might simply test that it accepts a list.
+        Room room1 = new Room("r1", 101, 150.0, Collections.singletonList("TV"), true);
+        Room room2 = new Room("r2", 102, 150.0, Collections.singletonList("WiFi"), true);
+        hotel.setRooms(Arrays.asList(room1, room2));
+
+        assertEquals("h1", hotel.getId());
+        assertEquals("Seaside Resort", hotel.getName());
+        assertEquals("Beach City", hotel.getLocation());
+        assertEquals("A lovely seaside hotel", hotel.getDescription());
+        assertEquals(Arrays.asList("Pool", "WiFi"), hotel.getAmenities());
+        assertNotNull(hotel.getRooms());
+        assertEquals(2, hotel.getRooms().size());
+    }
+}

@@ -1,5 +1,6 @@
 package com.travelapp.rest.controllers;
 
+import com.travelapp.core.model.Booking;
 import com.travelapp.core.model.Flight;
 import com.travelapp.core.model.Hotel;
 import com.travelapp.core.model.Room;
@@ -35,6 +36,17 @@ public class HotelController {
     public Hotel addHotel(@RequestBody Hotel hotel){
         var username = SecurityContextHolder.getContext().getAuthentication();
         return hotelService.addHotel(hotel);
+    }
+
+    @PostMapping(path = "/bookRoom")
+    @PreAuthorize("hasAuthority('USER')")
+    public Booking bookRoom(@RequestBody Booking booking){
+        var username = SecurityContextHolder.getContext().getAuthentication();
+        try {
+            return hotelService.bookRoom(booking.getResourceid(), booking.getDetails(), booking.getStartDate(), booking.getEndDate(), booking.getAmount());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping(path = {"", "/"})
