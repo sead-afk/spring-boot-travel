@@ -24,38 +24,37 @@ public class HotelService {
     }
 
     @Transactional
-    public Booking bookRoom(String hotelId, String roomId, LocalDate startDate, LocalDate endDate, double amount) throws Exception {
-        // Retrieve the hotel document
+    public Booking bookRoom(Booking booking) throws Exception {
+        // Extract parameters from the Booking object
+        String hotelId = booking.getResourceid();
+        String roomId = booking.getDetails();
+        LocalDate startDate = booking.getStartDate();
+        LocalDate endDate = booking.getEndDate();
+        double amount = booking.getAmount();
+
+        // Retrieve the hotel document by hotelId
         Hotel hotel = hotelRepository.findById(hotelId)
                 .orElseThrow(() -> new RuntimeException("Hotel not found with ID: " + hotelId));
 
-        // Find the desired room in the hotel's list
+        // Find the specific room in the hotel's list of rooms by matching roomId
         Room roomToBook = hotel.getRooms().stream()
                 .filter(room -> room.getId() != null && room.getId().equals(roomId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
 
-        // Check availability
+        // Check if the room is available
         if (!roomToBook.isAvailability()) {
             throw new RuntimeException("Room is not available for booking.");
         }
 
-        // Mark the room as booked
+        // Mark the room as booked (set availability to false) and save the hotel document
         roomToBook.setAvailability(false);
         hotelRepository.save(hotel);
 
-        // Create the Booking record (user details extracted in addBooking)
-        Booking booking = new Booking();
-        booking.setResourceid(hotelId);
-        booking.setDetails(roomId);
-        booking.setType("HOTEL");
-        booking.setStartDate(startDate);
-        booking.setEndDate(endDate);
-        booking.setAmount(amount);
+        // Set the booking date to now
         booking.setBookingDate(LocalDate.now());
 
-        // If addBooking fails, the transaction is rolled back,
-        // so the room's availability update will be reverted.
+        // Delegate to the generic addBooking method to check balance and save the booking
         return bookingService.addBooking(booking);
     }
 

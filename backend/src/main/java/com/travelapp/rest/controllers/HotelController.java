@@ -40,10 +40,9 @@ public class HotelController {
 
     @PostMapping(path = "/bookRoom")
     @PreAuthorize("hasAuthority('USER')")
-    public Booking bookRoom(@RequestBody Booking booking){
-        var username = SecurityContextHolder.getContext().getAuthentication();
+    public Booking bookRoom(@RequestBody Booking booking) {
         try {
-            return hotelService.bookRoom(booking.getResourceid(), booking.getDetails(), booking.getStartDate(), booking.getEndDate(), booking.getAmount());
+            return hotelService.bookRoom(booking);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
