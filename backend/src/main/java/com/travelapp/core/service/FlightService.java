@@ -6,7 +6,9 @@ import com.travelapp.core.repository.UserRepository;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,9 +17,11 @@ public class FlightService {
 
     private final FlightRepository flightRepository;
     private UserRepository userRepository;
+    private final BookingService bookingService;
 
-    public FlightService(FlightRepository flightRepository) {
+    public FlightService(FlightRepository flightRepository, BookingService bookingService) {
         this.flightRepository = flightRepository;
+        this.bookingService = bookingService;
     }
 
     /*public List<Flight> getCurrentUserFlights() {  //my booked flights
@@ -26,6 +30,38 @@ public class FlightService {
         return flightRepository.findByUserId(user.getId());
     }*/
 
+    @Transactional
+    public Booking bookTicket(Booking booking) throws Exception {
+        // Extract parameters from the Booking object
+        String flightId = booking.getResourceid();
+        String ticketId = booking.getDetails();
+        double amount = booking.getAmount();
+
+        // Retrieve the flight document by flightId
+        Flight flight = flightRepository.findById(flightId)
+                .orElseThrow(() -> new RuntimeException("Flight not found with ID: " + flightId));
+
+        // Find the specific room in the flight's list of rooms by matching ticketId
+        Tickets ticketToBook = flight.getTickets().stream()
+                .filter(ticket -> ticket.getId() != null && ticket.getId().equals(ticketId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + ticketId));
+
+        // Check if the room is available
+        if (!ticketToBook.isAvailability()) {
+            throw new RuntimeException("Room is not available for booking.");
+        }
+
+        // Mark the room as booked (set availability to false) and save the flight document
+        ticketToBook.setAvailability(false);
+        flightRepository.save(flight);
+
+        // Set the booking date to now
+        booking.setBookingDate(LocalDate.now());
+
+        // Delegate to the generic addBooking method to check balance and save the booking
+        return bookingService.addBooking(booking);
+    }
     public List<Flight> getFlights() {
         return flightRepository.findAll();
     }

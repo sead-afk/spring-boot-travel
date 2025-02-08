@@ -1,9 +1,6 @@
 package com.travelapp.rest.controllers;
 
-import com.travelapp.core.model.Destination;
-import com.travelapp.core.model.Flight;
-import com.travelapp.core.model.Room;
-import com.travelapp.core.model.Tickets;
+import com.travelapp.core.model.*;
 import com.travelapp.core.service.FlightService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +26,15 @@ public class FlightController {
         return flightService.getCurrentUserFlights();
     }*/
 
+    @PostMapping(path = "/bookTicket")
+    @PreAuthorize("hasAuthority('USER')")
+    public Booking bookTicket(@RequestBody Booking booking) {
+        try {
+            return flightService.bookTicket(booking);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     @PostMapping(path = "/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public Flight addFlight(@RequestBody Flight flight){
