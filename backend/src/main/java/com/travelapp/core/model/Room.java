@@ -24,7 +24,4 @@ public class Room {
     private double pricePerNight;
     private List<String> amenities;
     private boolean availability;
-
-    private LocalDate BookedAt;
-    private LocalDate BookedUntil;
 }
