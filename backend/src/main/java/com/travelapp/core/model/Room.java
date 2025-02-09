@@ -7,6 +7,8 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -22,4 +24,7 @@ public class Room {
     private double pricePerNight;
     private List<String> amenities;
     private boolean availability;
+
+    private LocalDate BookedAt;
+    private LocalDate BookedUntil;
 }

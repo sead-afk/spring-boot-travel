@@ -2,6 +2,7 @@ package com.travelapp.core.service;
 
 import com.travelapp.core.model.*;
 import com.travelapp.core.repository.HotelRepository;
+import com.travelapp.core.repository.RoomBookingsRepository;
 import com.travelapp.core.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,9 +19,12 @@ public class HotelService {
     private final HotelRepository hotelRepository;
     private final BookingService bookingService;
 
-    public HotelService(HotelRepository hotelRepository, BookingService bookingService) {
+    private final RoomBookingsRepository roomBookingsRepository;
+
+    public HotelService(HotelRepository hotelRepository, BookingService bookingService, RoomBookingsRepository roomBookingsRepository) {
         this.hotelRepository = hotelRepository;
         this.bookingService = bookingService;
+        this.roomBookingsRepository = roomBookingsRepository;
     }
 
     @Transactional
@@ -33,27 +37,38 @@ public class HotelService {
         double amount = booking.getAmount();
 
         // Retrieve the hotel document by hotelId
-        Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new RuntimeException("Hotel not found with ID: " + hotelId));
+//        Hotel hotel = hotelRepository.findById(hotelId)
+//                .orElseThrow(() -> new RuntimeException("Hotel not found with ID: " + hotelId));
 
         // Find the specific room in the hotel's list of rooms by matching roomId
-        Room roomToBook = hotel.getRooms().stream()
-                .filter(room -> room.getId() != null && room.getId().equals(roomId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
+//        Room roomToBook = hotel.getRooms().stream()
+//                .filter(room -> room.getId() != null && room.getId().equals(roomId))
+//                .findFirst()
+//                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
+
+
+        RoomBooking roomToBook = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId,hotelId);
 
         // Check if the room is available
-        if (!roomToBook.isAvailability()) {
+        if ( roomToBook != null && !roomToBook.isAvailable(startDate,endDate)) {
             throw new RuntimeException("Room is not available for booking.");
         }
 
+        RoomBooking newEntry = new RoomBooking();
+        newEntry.setRoomId(roomId);
+        newEntry.setHotelId(hotelId);
+        newEntry.setBookedAt(startDate);
+        newEntry.setBookedUntil(endDate);
+        newEntry.setCreatedAt(LocalDate.now());
+
+        roomBookingsRepository.save(newEntry);
         // Mark the room as booked (set availability to false) and save the hotel document
-        roomToBook.setAvailability(false);
-        hotelRepository.save(hotel);
+        //roomToBook.setAvailability(false);
+
+        //hotelRepository.save(hotel);
 
         // Set the booking date to now
         booking.setBookingDate(LocalDate.now());
-
         // Delegate to the generic addBooking method to check balance and save the booking
         return bookingService.addBooking(booking);
     }
