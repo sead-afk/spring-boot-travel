@@ -51,25 +51,27 @@ public class BookingController {
         return bookingService.getBookings();
     }
 
-    @PutMapping(path = "/{bookingId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public Booking updateBooking(@PathVariable("bookingId") String bookingId, @RequestBody Booking bookingpayload) throws Exception {
-        return bookingService.updateBooking(bookingId, bookingpayload);
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<Booking> updateBooking(@PathVariable String id, @RequestBody Booking updatedBooking) {
+        try {
+            Booking booking = bookingService.updateBooking(id, updatedBooking);
+            return ResponseEntity.ok(booking);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
     }
 
-    @DeleteMapping(path = "/{booking}")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public void deleteBooking(@RequestBody Booking booking) {
-        bookingService.deleteBooking(booking);
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<?> deleteBooking(@PathVariable String id) {
+        try {
+            bookingService.deleteBooking(id);
+            return ResponseEntity.ok("Booking deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
-    /*@GetMapping(path = "/filter")
-    @PreAuthorize("hasAuthority('ADMIN')")
-    public List<Booking> filterBooking(
-            @RequestParam("type") String type,
-            @RequestParam("referenceNumber") String referenceNumber
-    ){
-        return bookingService.filter(type, referenceNumber);
-    }*/
 
     @GetMapping(path = "/{bookingId}")
     @PreAuthorize("hasAuthority('ADMIN')")

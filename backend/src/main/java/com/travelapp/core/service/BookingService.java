@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,31 +60,36 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    public void deleteBooking(Booking payload) {
-        Optional<Booking> bookingOptional = bookingRepository.findById(payload.getId());
-        if (!bookingOptional.isPresent()) {
-            throw new IllegalStateException("Booking does not exist");
+    public Booking updateBooking(String bookingId, Booking updatedBooking) throws Exception {
+        Booking existing = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        // Check that the booking is upcoming (e.g. startDate is in the future)
+        if (existing.getStartDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Cannot edit past bookings");
         }
-        bookingRepository.deleteById(payload.getId());
+
+        // Update the fields (you can decide which fields are editable)
+        existing.setStartDate(updatedBooking.getStartDate());
+        existing.setEndDate(updatedBooking.getEndDate());
+        existing.setAmount(updatedBooking.getAmount());
+        // Optionally update details if allowed (e.g., room or seat selection)
+        existing.setDetails(updatedBooking.getDetails());
+
+        // You might also need to check if the room/ticket is still available for the new dates, etc.
+        // For simplicity, we assume the update is valid.
+        return bookingRepository.save(existing);
     }
 
-    public Booking updateBooking(String bookingId, Booking payload) throws Exception {
-        Optional<Booking> booking = bookingRepository.findById(bookingId);
-        if(booking.isEmpty())
-            throw new Exception("Cannot find booking with provided payload");
-
-        //booking.get().setUser(payload.getUser());
-        booking.get().setType(payload.getType());
-        //booking.get().setReferenceNumber(payload.getReferenceNumber());
-        booking.get().setBookingDate(payload.getBookingDate());
-        booking.get().setStartDate(payload.getStartDate());
-        booking.get().setEndDate(payload.getEndDate());
-        booking.get().setUsername(payload.getUsername());
-        booking.get().setResourceid(payload.getResourceid());
-        booking.get().setDetails(payload.getDetails());
-
-        bookingRepository.save(booking.get());
-        return booking.get();
+    public void deleteBooking(String bookingId) throws Exception {
+        Booking existing = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new RuntimeException("Booking not found"));
+        // You might restrict deletion only to upcoming bookings
+        if (existing.getStartDate().isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("Cannot delete past bookings");
+        }
+        // Optionally, restore room/ticket availability if needed
+        bookingRepository.delete(existing);
     }
 
     public Booking getBookingById(String bookingId) throws Exception {
