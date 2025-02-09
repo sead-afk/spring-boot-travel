@@ -6,6 +6,8 @@ import com.travelapp.core.model.Hotel;
 import com.travelapp.core.model.Room;
 import com.travelapp.core.service.HotelService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -40,11 +42,15 @@ public class HotelController {
 
     @PostMapping(path = "/bookRoom")
     @PreAuthorize("hasAuthority('USER')")
-    public Booking bookRoom(@RequestBody Booking booking) {
+    public ResponseEntity<?> bookRoom(@RequestBody Booking booking) {
         try {
-            return hotelService.bookRoom(booking);
+
+            var room = hotelService.bookRoom(booking);
+            return ResponseEntity.ok(room);
+
         } catch (Exception e) {
-            throw new RuntimeException(e);
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
