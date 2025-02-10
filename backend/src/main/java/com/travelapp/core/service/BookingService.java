@@ -1,8 +1,12 @@
 package com.travelapp.core.service;
 
 import com.travelapp.core.model.Booking;
+import com.travelapp.core.model.RoomBooking;
+import com.travelapp.core.model.SeatBooking;
 import com.travelapp.core.model.User;
 import com.travelapp.core.repository.BookingRepository;
+import com.travelapp.core.repository.RoomBookingsRepository;
+import com.travelapp.core.repository.SeatBookingRepository;
 import com.travelapp.core.repository.UserRepository;
 import com.travelapp.rest.dto.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +24,15 @@ public class BookingService {
     @Autowired
     private UserService userService;
     private final BookingRepository bookingRepository;
+    private final RoomBookingsRepository roomBookingsRepository;
+    @Autowired
+    private SeatBookingRepository seatBookingRepository;
 
 
-    public BookingService(BookingRepository bookingRepository, UserService userService) {
+    public BookingService(BookingRepository bookingRepository, UserService userService, RoomBookingsRepository roomBookingsRepository) {
         this.bookingRepository = bookingRepository;
         this.userService = userService;
+        this.roomBookingsRepository = roomBookingsRepository;
     }
 
     /*public List<Booking> getCurrentUserBookings() {
@@ -88,7 +96,19 @@ public class BookingService {
         if (existing.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Cannot delete past bookings");
         }
-        // Optionally, restore room/ticket availability if needed
+        String type = existing.getType();
+        if(type.equals("HOTEL")) {
+            String roomId = existing.getDetails();
+            String hotelId = existing.getResourceid();
+            RoomBooking roomBooking = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId, hotelId);
+            // Optionally, restore room/ticket availability if needed
+            roomBookingsRepository.delete(roomBooking);
+        }else if(type.equals("FLIGHT")) {
+            String flightId = existing.getResourceid();
+            String ticketId = existing.getDetails();
+            SeatBooking seatBooking = seatBookingRepository.findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
+            seatBookingRepository.delete(seatBooking);
+        }
         bookingRepository.delete(existing);
     }
 
