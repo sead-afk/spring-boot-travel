@@ -129,7 +129,11 @@ public class BookingService {
             String hotelId = existing.getResourceid();
             RoomBooking roomBooking = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdAndBookingIdOrderByCreatedAtDesc(roomId, hotelId, bookingId);
             // Optionally, restore room/ticket availability if needed
-            roomBookingsRepository.delete(roomBooking);
+            if(roomBooking != null)
+            {
+                roomBookingsRepository.delete(roomBooking);
+            }
+
         }else if(type.equals("FLIGHT")) {
             String flightId = existing.getResourceid();
             String ticketId = existing.getDetails();
