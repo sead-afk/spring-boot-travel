@@ -51,7 +51,7 @@ public class HotelService {
 
         // Check if the room is available
         if ( roomToBook != null && !roomToBook.isAvailable(startDate,endDate)) {
-            throw new RuntimeException("Room is not available for booking.");
+            throw new IllegalArgumentException("Room is not available for booking.");
         }
 
         RoomBooking newEntry = new RoomBooking();
