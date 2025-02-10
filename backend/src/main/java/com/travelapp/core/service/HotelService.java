@@ -59,6 +59,7 @@ public class HotelService {
         newEntry.setHotelId(hotelId);
         newEntry.setBookedAt(startDate);
         newEntry.setBookedUntil(endDate);
+        newEntry.setBookingId(booking.getId());
         newEntry.setCreatedAt(LocalDate.now());
 
         roomBookingsRepository.save(newEntry);

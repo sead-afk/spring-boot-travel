@@ -76,6 +76,33 @@ public class BookingService {
         if (existing.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Cannot edit past bookings");
         }
+        String type = existing.getType();
+        if(type.equals("HOTEL"))
+        {
+            String roomId = existing.getDetails();
+            String hotelId = existing.getResourceid();
+            var roomBookings = roomBookingsRepository.findRoomBookingsByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId, hotelId);
+
+            for(var roomBooking :roomBookings)
+            {
+                if (!roomBooking.isAvailable(updatedBooking.getStartDate(), updatedBooking.getEndDate())) {
+                    throw new IllegalArgumentException("Overlapping");
+                }
+            }
+
+            existing.setStartDate(updatedBooking.getStartDate());
+            existing.setEndDate(updatedBooking.getEndDate());
+            existing.setAmount(updatedBooking.getAmount());
+            // Optionally update details if allowed (e.g., room or seat selection)
+            existing.setDetails(updatedBooking.getDetails());
+        }
+        else if(type.equals("FLIGHT"))
+        {
+            String flightId = existing.getResourceid();
+            String ticketId = existing.getDetails();
+            SeatBooking seatBooking = seatBookingRepository.findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
+
+        }
 
         // Update the fields (you can decide which fields are editable)
         existing.setStartDate(updatedBooking.getStartDate());
@@ -100,7 +127,7 @@ public class BookingService {
         if(type.equals("HOTEL")) {
             String roomId = existing.getDetails();
             String hotelId = existing.getResourceid();
-            RoomBooking roomBooking = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId, hotelId);
+            RoomBooking roomBooking = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdAndBookingIdOrderByCreatedAtDesc(roomId, hotelId, bookingId);
             // Optionally, restore room/ticket availability if needed
             roomBookingsRepository.delete(roomBooking);
         }else if(type.equals("FLIGHT")) {

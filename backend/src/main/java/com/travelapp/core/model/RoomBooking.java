@@ -20,6 +20,7 @@ public class RoomBooking {
 
     private String hotelId;
     private String roomId;
+    private String bookingId;
     private LocalDate BookedAt;
     private LocalDate BookedUntil;
     private LocalDate CreatedAt;
