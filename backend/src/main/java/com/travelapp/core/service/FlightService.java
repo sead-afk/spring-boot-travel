@@ -65,18 +65,19 @@ public class FlightService {
         newEntry.setTicketId(ticketId);
         newEntry.setFlightId(flightId);
         newEntry.setBookedAt(startDate);
-        newEntry.setBookingId(booking.getId());
+
         newEntry.setCreatedAt(LocalDate.now());
 
         // Mark the room as booked (set availability to false) and save the flight document
 //        seatToBook.setAvailability(false);
         // Set the booking date to now
         booking.setBookingDate(LocalDate.now());
-
+        var bookingEntry = bookingService.addBooking(booking);
+        newEntry.setBookingId(bookingEntry.getId());
         seatBookingRepository.save(newEntry);
 
         // Delegate to the generic addBooking method to check balance and save the booking
-        return bookingService.addBooking(booking);
+        return  bookingEntry;
     }
     public List<Flight> getFlights() {
         return flightRepository.findAll();
