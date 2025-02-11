@@ -17,7 +17,6 @@ public class Tickets {
     @Id
     private String id;
     private String seatNumber;
-    private boolean availability;
     private double price;
 
 }

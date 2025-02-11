@@ -23,5 +23,4 @@ public class Room {
     private int roomNumber;
     private double pricePerNight;
     private List<String> amenities;
-    private boolean availability;
 }
