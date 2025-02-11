@@ -168,7 +168,7 @@ public class BookingService {
             String flightId = existing.getResourceid();
             String ticketId = existing.getDetails();
             SeatBooking seatBooking = seatBookingRepository
-                    .findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
+                    .findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId, bookingId);
             if (seatBooking != null) {
                 seatBookingRepository.delete(seatBooking);
             }

@@ -3,6 +3,8 @@ package com.travelapp.rest.controllers;
 import com.travelapp.core.model.*;
 import com.travelapp.core.service.FlightService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,11 +30,12 @@ public class FlightController {
 
     @PostMapping(path = "/bookTicket")
     @PreAuthorize("hasAuthority('USER')")
-    public Booking bookTicket(@RequestBody Booking booking) {
+    public ResponseEntity<?> bookTicket(@RequestBody Booking booking) {
         try {
-            return flightService.bookTicket(booking);
+            var ticket = flightService.bookTicket(booking);
+            return ResponseEntity.ok(ticket);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
     @PostMapping(path = "/add")
