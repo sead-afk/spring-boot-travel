@@ -62,10 +62,10 @@ public class HotelService {
         newEntry.setHotelId(hotelId);
         newEntry.setBookedAt(startDate);
         newEntry.setBookedUntil(endDate);
-        newEntry.setBookingId(booking.getId());
+
         newEntry.setCreatedAt(LocalDate.now());
 
-        roomBookingsRepository.save(newEntry);
+
         // Mark the room as booked (set availability to false) and save the hotel document
         //roomToBook.setAvailability(false);
 
@@ -73,8 +73,12 @@ public class HotelService {
 
         // Set the booking date to now
         booking.setBookingDate(LocalDate.now());
+        var newBookingEntry=bookingService.addBooking(booking);
+        newEntry.setBookingId(newBookingEntry.getId());
+        roomBookingsRepository.save(newEntry);
+
         // Delegate to the generic addBooking method to check balance and save the booking
-        return bookingService.addBooking(booking);
+        return  newBookingEntry;
     }
 
     /*public List<Hotel> getCurrentUserHotels() {  //my booked Hotels
