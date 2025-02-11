@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -73,10 +74,23 @@ public class BookingService {
         Booking existing = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        // Check that the booking is upcoming (e.g., startDate is in the future)
-        if (existing.getStartDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Cannot edit past bookings");
+
+        if(Objects.equals(existing.getType(), "FLIGHT"))
+        {
+            if(existing.getBookingDate().isBefore(LocalDate.now()))
+            {
+                throw new IllegalArgumentException("Cannot edit past bookings");
+            }
         }
+        else if(Objects.equals(existing.getType(), "HOTEL"))
+        {
+            if (existing.getStartDate().isBefore(LocalDate.now())) {
+                throw new IllegalArgumentException("Cannot edit past bookings");
+            }
+        }
+
+        // Check that the booking is upcoming (e.g., startDate is in the future)
+
 
         // Retrieve the current user (from security context)
         var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -116,12 +130,13 @@ public class BookingService {
             existing.setEndDate(updatedBooking.getEndDate());
             existing.setAmount(newAmount);
             existing.setDetails(updatedBooking.getDetails());
+
         } else if (type.equals("FLIGHT")) {
             String flightId = existing.getResourceid();
             String ticketId = existing.getDetails();
             var seatBookings = seatBookingRepository.findSeatBookingsByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
             for (var seatBooking : seatBookings) {
-                if (!seatBooking.isAvailable(updatedBooking.getStartDate())) {
+                if (!seatBooking.isAvailable(updatedBooking.getBookingDate(),ticketId)) {
                     throw new IllegalArgumentException("Overlapping booking exists");
                 }
             }

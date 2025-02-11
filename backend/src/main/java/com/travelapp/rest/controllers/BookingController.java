@@ -53,12 +53,12 @@ public class BookingController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('USER')")
-    public ResponseEntity<Booking> updateBooking(@PathVariable String id, @RequestBody Booking updatedBooking) {
+    public ResponseEntity<?> updateBooking(@PathVariable String id, @RequestBody Booking updatedBooking) {
         try {
             Booking booking = bookingService.updateBooking(id, updatedBooking);
             return ResponseEntity.ok(booking);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 

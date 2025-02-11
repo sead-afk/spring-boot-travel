@@ -18,13 +18,14 @@ public class SeatBooking {
 
     private String flightId;
     private String ticketId;
+    private String bookingId;
     private LocalDate BookedAt;
     private LocalDate CreatedAt;
 
-    public boolean isAvailable(LocalDate startDate)
+    public boolean isAvailable(LocalDate startDate,String ticketId)
     {
         return !(BookedAt.getYear() == startDate.getYear() &&
                 BookedAt.getMonthValue() == startDate.getMonthValue() &&
-                BookedAt.getDayOfMonth() == startDate.getDayOfMonth());
+                BookedAt.getDayOfMonth() == startDate.getDayOfMonth() && this.ticketId.equals(ticketId));
     }
 }

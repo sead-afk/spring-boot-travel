@@ -57,7 +57,7 @@ public class FlightService {
         SeatBooking seatToBook = seatBookingRepository.findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
 
         // Check if the room is available
-        if ( seatToBook != null && !seatToBook.isAvailable(startDate)) {
+        if ( seatToBook != null && !seatToBook.isAvailable(startDate,ticketId)) {
             throw new IllegalArgumentException("Seat is not available for booking.");
         }
 
