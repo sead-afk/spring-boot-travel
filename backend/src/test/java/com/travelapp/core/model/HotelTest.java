@@ -17,8 +17,8 @@ class HotelTest {
         hotel.setAmenities(Arrays.asList("Pool", "WiFi"));
 
         // For rooms, you might simply test that it accepts a list.
-        Room room1 = new Room("r1", 101, 150.0, Collections.singletonList("TV"), true);
-        Room room2 = new Room("r2", 102, 150.0, Collections.singletonList("WiFi"), true);
+        Room room1 = new Room("r1", 101, 150.0, Collections.singletonList("TV"));
+        Room room2 = new Room("r2", 102, 150.0, Collections.singletonList("WiFi"));
         hotel.setRooms(Arrays.asList(room1, room2));
 
         assertEquals("h1", hotel.getId());

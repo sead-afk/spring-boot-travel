@@ -36,8 +36,8 @@ class FlightServiceTest {
         dummyFlight.setDepartureTime(LocalDateTime.now().plusDays(1));
         dummyFlight.setArrivalTime(LocalDateTime.now().plusDays(1).plusHours(6));
         dummyFlight.setTickets(Arrays.asList(
-                new Tickets("ticket1", "12A", true, 200.0),
-                new Tickets("ticket2", "12B", true, 200.0)
+                new Tickets("ticket1", "12A", 200.0),
+                new Tickets("ticket2", "12B", 200.0)
         ));
     }
 

@@ -20,8 +20,8 @@ class FlightTest {
         flight.setDepartureTime(depTime);
         flight.setArrivalTime(arrTime);
         // For tickets, simply verify assignment (detailed tests would go in TicketsTest)
-        Tickets ticket1 = new Tickets("t1", "12A", true, 200.0);
-        Tickets ticket2 = new Tickets("t2", "12B", true, 200.0);
+        Tickets ticket1 = new Tickets("t1", "12A", 200.0);
+        Tickets ticket2 = new Tickets("t2", "12B", 200.0);
         flight.setTickets(Arrays.asList(ticket1, ticket2));
 
         assertEquals("f1", flight.getId());

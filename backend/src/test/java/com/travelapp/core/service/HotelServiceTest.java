@@ -35,8 +35,8 @@ class HotelServiceTest {
         dummyHotel.setDescription("A lovely seaside hotel");
         // Set up dummy rooms if needed
         dummyHotel.setRooms(Arrays.asList(
-                new Room("room1", 101, 150.0, Collections.singletonList("TV"), true),
-                new Room("room2", 102, 150.0, Collections.singletonList("WiFi"), true)
+                new Room("room1", 101, 150.0, Collections.singletonList("TV")),
+                new Room("room2", 102, 150.0, Collections.singletonList("WiFi"))
         ));
     }
 
