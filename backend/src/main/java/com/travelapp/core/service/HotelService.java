@@ -47,12 +47,15 @@ public class HotelService {
 //                .orElseThrow(() -> new RuntimeException("Room not found with ID: " + roomId));
 
 
-        RoomBooking roomToBook = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId,hotelId);
+        var roomsToBook = roomBookingsRepository.findRoomBookingsByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId,hotelId);
 
-        // Check if the room is available
-        if ( roomToBook != null && !roomToBook.isAvailable(startDate,endDate)) {
-            throw new IllegalArgumentException("Room is not available for booking.");
+        for(var roomToBook : roomsToBook)
+        {
+            if ( roomToBook != null && !roomToBook.isAvailable(startDate,endDate)) {
+                throw new IllegalArgumentException("Room is not available for booking.");
+            }
         }
+        // Check if the room is available
 
         RoomBooking newEntry = new RoomBooking();
         newEntry.setRoomId(roomId);

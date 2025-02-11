@@ -77,7 +77,7 @@ public class FlightService {
         seatBookingRepository.save(newEntry);
 
         // Delegate to the generic addBooking method to check balance and save the booking
-        return  bookingEntry;
+        return bookingEntry;
     }
     public List<Flight> getFlights() {
         return flightRepository.findAll();
