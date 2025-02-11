@@ -69,79 +69,115 @@ public class BookingService {
     }
 
     public Booking updateBooking(String bookingId, Booking updatedBooking) throws Exception {
+        // Retrieve the existing booking
         Booking existing = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        // Check that the booking is upcoming (e.g. startDate is in the future)
+        // Check that the booking is upcoming (e.g., startDate is in the future)
         if (existing.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Cannot edit past bookings");
         }
+
+        // Retrieve the current user (from security context)
+        var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userService.getUserProfile(username);
+
+        // Compute the difference in amount
+        double oldAmount = existing.getAmount();
+        double newAmount = updatedBooking.getAmount();
+        double difference = newAmount - oldAmount;
+
+        // If the new amount is higher, check if the user has sufficient balance
+        if (difference > 0) {
+            if (user.getBalance() < difference) {
+                throw new IllegalArgumentException("Insufficient balance to update booking");
+            }
+            user.setBalance(user.getBalance() - difference);
+        } else {
+            // If new amount is lower, refund the difference to the user's balance
+            user.setBalance(user.getBalance() + (-difference));
+        }
+        userService.updateUser(user.getId(), new UserRequestDTO(user));
+
+        // Process booking based on type
         String type = existing.getType();
-        if(type.equals("HOTEL"))
-        {
+        if (type.equals("HOTEL")) {
             String roomId = existing.getDetails();
             String hotelId = existing.getResourceid();
             var roomBookings = roomBookingsRepository.findRoomBookingsByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId, hotelId);
-
-            for(var roomBooking :roomBookings)
-            {
+            for (var roomBooking : roomBookings) {
                 if (!roomBooking.isAvailable(updatedBooking.getStartDate(), updatedBooking.getEndDate())) {
-                    throw new IllegalArgumentException("Overlapping");
+                    throw new IllegalArgumentException("Overlapping booking exists");
                 }
             }
-
+            // Update hotel booking fields
             existing.setStartDate(updatedBooking.getStartDate());
             existing.setEndDate(updatedBooking.getEndDate());
-            existing.setAmount(updatedBooking.getAmount());
-            // Optionally update details if allowed (e.g., room or seat selection)
+            existing.setAmount(newAmount);
             existing.setDetails(updatedBooking.getDetails());
-        }
-        else if(type.equals("FLIGHT"))
-        {
+        } else if (type.equals("FLIGHT")) {
             String flightId = existing.getResourceid();
             String ticketId = existing.getDetails();
-            SeatBooking seatBooking = seatBookingRepository.findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
-
+            var seatBookings = seatBookingRepository.findSeatBookingsByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
+            for (var seatBooking : seatBookings) {
+                if (!seatBooking.isAvailable(updatedBooking.getStartDate())) {
+                    throw new IllegalArgumentException("Overlapping booking exists");
+                }
+            }
+            // (Include any flight-specific validations if needed)
+            existing.setAmount(newAmount);
+            existing.setDetails(updatedBooking.getDetails());
         }
 
-        // Update the fields (you can decide which fields are editable)
-        existing.setStartDate(updatedBooking.getStartDate());
-        existing.setEndDate(updatedBooking.getEndDate());
-        existing.setAmount(updatedBooking.getAmount());
-        // Optionally update details if allowed (e.g., room or seat selection)
-        existing.setDetails(updatedBooking.getDetails());
-
-        // You might also need to check if the room/ticket is still available for the new dates, etc.
-        // For simplicity, we assume the update is valid.
+        // Save the updated booking
         return bookingRepository.save(existing);
     }
 
+
     public void deleteBooking(String bookingId) throws Exception {
+        // Retrieve the existing booking
         Booking existing = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
-        // You might restrict deletion only to upcoming bookings
+
+        // Prevent deletion of past bookings
         if (existing.getStartDate().isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("Cannot delete past bookings");
         }
+
+        // Retrieve the current user
+        var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userService.getUserProfile(username);
+
+        // Refund the full booking amount to the user's balance
+        user.setBalance(user.getBalance() + existing.getAmount());
+        userService.updateUser(user.getId(), new UserRequestDTO(user));
+
+        // Process deletion based on booking type
         String type = existing.getType();
-        if(type.equals("HOTEL")) {
+        if (type.equals("HOTEL")) {
             String roomId = existing.getDetails();
             String hotelId = existing.getResourceid();
-            RoomBooking roomBooking = roomBookingsRepository.findRoomBookingByRoomIdAndHotelIdAndBookingIdOrderByCreatedAtDesc(roomId, hotelId, bookingId);
-            // Optionally, restore room/ticket availability if needed
-            if(roomBooking != null)
-            {
+            RoomBooking roomBooking = roomBookingsRepository
+                    .findRoomBookingByRoomIdAndHotelIdAndBookingIdOrderByCreatedAtDesc(roomId, hotelId, bookingId);
+            if (roomBooking != null) {
                 roomBookingsRepository.delete(roomBooking);
             }
-
-        }else if(type.equals("FLIGHT")) {
+        } else if (type.equals("FLIGHT")) {
             String flightId = existing.getResourceid();
             String ticketId = existing.getDetails();
-            SeatBooking seatBooking = seatBookingRepository.findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
-            seatBookingRepository.delete(seatBooking);
+            SeatBooking seatBooking = seatBookingRepository
+                    .findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
+            if (seatBooking != null) {
+                seatBookingRepository.delete(seatBooking);
+            }
         }
+
+        // Finally, delete the booking
         bookingRepository.delete(existing);
     }
+
 
     public Booking getBookingById(String bookingId) throws Exception {
         Optional<Booking> booking = bookingRepository.findById(bookingId);
