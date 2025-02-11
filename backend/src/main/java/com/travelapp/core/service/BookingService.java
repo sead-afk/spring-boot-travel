@@ -75,14 +75,14 @@ public class BookingService {
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
 
-        if(Objects.equals(existing.getType(), "FLIGHT"))
+        if(existing.getType().equals("FLIGHT"))
         {
             if(existing.getBookingDate().isBefore(LocalDate.now()))
             {
                 throw new IllegalArgumentException("Cannot edit past bookings");
             }
         }
-        else if(Objects.equals(existing.getType(), "HOTEL"))
+        else if(existing.getType().equals("HOTEL"))
         {
             if (existing.getStartDate().isBefore(LocalDate.now())) {
                 throw new IllegalArgumentException("Cannot edit past bookings");
@@ -117,8 +117,8 @@ public class BookingService {
         // Process booking based on type
         String type = existing.getType();
         if (type.equals("HOTEL")) {
-            String roomId = existing.getDetails();
-            String hotelId = existing.getResourceid();
+            String roomId = updatedBooking.getDetails();
+            String hotelId = updatedBooking.getResourceid();
             var roomBookings = roomBookingsRepository.findRoomBookingsByRoomIdAndHotelIdOrderByCreatedAtDesc(roomId, hotelId);
             for (var roomBooking : roomBookings) {
                 if (!roomBooking.isAvailable(updatedBooking.getStartDate(), updatedBooking.getEndDate())) {
@@ -132,8 +132,8 @@ public class BookingService {
             existing.setDetails(updatedBooking.getDetails());
 
         } else if (type.equals("FLIGHT")) {
-            String flightId = existing.getResourceid();
-            String ticketId = existing.getDetails();
+            String flightId = updatedBooking.getResourceid();
+            String ticketId = updatedBooking.getDetails();
             var seatBookings = seatBookingRepository.findSeatBookingsByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId);
             for (var seatBooking : seatBookings) {
                 if (!seatBooking.isAvailable(updatedBooking.getBookingDate(),ticketId)) {
