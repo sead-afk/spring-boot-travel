@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
@@ -18,6 +19,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class RoomBooking {
 
+    @Id
+    private String id;
     private String hotelId;
     private String roomId;
     private String bookingId;

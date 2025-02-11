@@ -155,10 +155,22 @@ public class BookingService {
         Booking existing = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new RuntimeException("Booking not found"));
 
-        // Prevent deletion of past bookings
-        if (existing.getStartDate().isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("Cannot delete past bookings");
+
+        if(existing.getType().equals("FLIGHT"))
+        {
+            if (existing.getBookingDate().isBefore(LocalDate.now())) {
+                throw new IllegalArgumentException("Cannot delete past bookings");
+            }
         }
+        else if(existing.getType().equals("HOTEL"))
+        {
+            if (existing.getStartDate().isBefore(LocalDate.now())) {
+                throw new IllegalArgumentException("Cannot delete past bookings");
+            }
+        }
+
+        // Prevent deletion of past bookings
+
 
         // Retrieve the current user
         var userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -183,7 +195,7 @@ public class BookingService {
             String flightId = existing.getResourceid();
             String ticketId = existing.getDetails();
             SeatBooking seatBooking = seatBookingRepository
-                    .findSeatBookingByTicketIdAndFlightIdOrderByCreatedAtDesc(ticketId, flightId, bookingId);
+                    .findSeatBookingByTicketIdAndFlightIdAndBookingIdOrderByCreatedAtDesc(ticketId, flightId, bookingId);
             if (seatBooking != null) {
                 seatBookingRepository.delete(seatBooking);
             }

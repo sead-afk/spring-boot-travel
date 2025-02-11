@@ -65,6 +65,7 @@ public class FlightService {
         newEntry.setTicketId(ticketId);
         newEntry.setFlightId(flightId);
         newEntry.setBookedAt(startDate);
+        newEntry.setBookingId(booking.getId());
         newEntry.setCreatedAt(LocalDate.now());
 
         // Mark the room as booked (set availability to false) and save the flight document
