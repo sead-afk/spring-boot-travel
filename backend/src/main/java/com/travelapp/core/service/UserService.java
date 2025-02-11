@@ -59,34 +59,22 @@ public class UserService {
         if (userOpt.isEmpty()) {
             throw new Exception("Cannot find user with the provided userId");
         }
-
         User existingUser = userOpt.get();
 
-        // If the balance is being updated, ensure no insufficient funds are present
+        // Ensure the new balance is not negative
         if (payload.getBalance() != null && payload.getBalance() < 0) {
             throw new IllegalArgumentException("Account balance cannot be negative.");
         }
 
-        // Update the user details with the new information from the payload
-        User updatedUser = payload.toEntity();
-        updatedUser.setId(existingUser.getId());
+        // Update the existing user's details with the payload
+        // (You might only update the balance in this case)
+        existingUser.setBalance(payload.getBalance());
 
-        // If the account balance has changed, update it
-        if (payload.getBalance() != null && !payload.getBalance().equals(existingUser.getBalance())) {
-            double newBalance = payload.getBalance();
-            // Ensure sufficient funds if balance is being deducted (if applicable)
-            if (newBalance > existingUser.getBalance()) {
-                throw new IllegalArgumentException("Cannot deduct balance, insufficient funds.");
-            }
-            existingUser.setBalance(newBalance);
-        }
-
-        // Save the updated user data
-        updatedUser = userRepository.save(existingUser);
-
-        // Return updated user data as a DTO
-        return new UserDTO(updatedUser);
+        // Save and return
+        existingUser = userRepository.save(existingUser);
+        return new UserDTO(existingUser);
     }
+
 
 
     public UserDTO getUserById(String userId) throws Exception {
