@@ -12,7 +12,7 @@ logging:
 
 security:
   jwt:
-    secret: 'YF5WkJBdXRw9DBz1gqVEtIdag0x5RNxH7wHf0cH15hnobA4lC5'
+    secret: ${JWT_SECRET}
     expiration-time: 3600000 # Token expiration in milliseconds (1 hour)
 
 
