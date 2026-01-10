@@ -7,6 +7,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.impl.lang.Function;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -58,14 +59,16 @@ public class JwtService {
 
     public boolean isValidToken(String token) {
         try {
-            Jws<Claims> claims = Jwts.parser()
-                    .setSigningKey(jwtSigningKey) // Or the public key
-                    .build().parseClaimsJws(token);
-            return !claims.getBody().getExpiration().before(new Date());
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token);
+            return true;
         } catch (JwtException | IllegalArgumentException e) {
-            return false; // Token is invalid or expired
+            return false;
         }
     }
+
 
 
     private boolean isTokenExpired(String token) {
@@ -86,5 +89,11 @@ public class JwtService {
         return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token)
                 .getPayload();
     }
+
+    @PostConstruct
+    public void debug() {
+        System.out.println("JWT_SECRET loaded: " + (jwtSigningKey != null));
+    }
+
 
 }
