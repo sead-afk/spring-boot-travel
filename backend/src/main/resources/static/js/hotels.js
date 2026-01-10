@@ -186,7 +186,7 @@ document.getElementById("confirm-booking").addEventListener("click", async () =>
     console.log("Booking payload:", bookingDetails);
 
     try {
-        const response = await fetch('${API_BASE_URL}/api/hotels/bookRoom', {
+        const response = await fetch(`${API_BASE_URL}/api/hotels/bookRoom`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

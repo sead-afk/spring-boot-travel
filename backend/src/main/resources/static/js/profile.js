@@ -393,7 +393,7 @@ async function updateUserBalance() {
             alert("Please enter a valid amount.");
             return;
         }
-        const response = await fetch('${API_BASE_URL}/api/users/add-funds', {
+        const response = await fetch(`${API_BASE_URL}/api/users/add-funds`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,

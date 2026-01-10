@@ -168,7 +168,7 @@ document.getElementById("confirm-flight-booking").addEventListener("click", asyn
     let responseStatusText="";
     // Make the booking request
     try {
-        const response = await fetch('${API_BASE_URL}/api/flights/bookTicket', {
+        const response = await fetch(`${API_BASE_URL}/api/flights/bookTicket`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
